@@ -1,0 +1,58 @@
+name: Deploy Manually
+
+on:
+  workflow_dispatch:
+    inputs:
+      redeploy:
+        type: boolean
+        default: false
+      channel:
+        type: string
+        default: release
+      version:
+        type: string
+        default: "0.8.2"
+      changelog:
+        type: string
+        default: ""
+      versionsdbremote:
+        type: string
+        default: master
+
+jobs:
+  build:
+    if: "!inputs.redeploy"
+    uses: ./.github/workflows/build-linux.yml
+    with:
+      channel: ${{ inputs.channel }}
+      version: ${{ inputs.version }}
+      changelog: ${{ inputs.changelog }}
+      versionsdbremote: ${{ inputs.versionsdbremote }}
+
+  deploy:
+    if: "!failure() && !cancelled()"
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    needs: build
+    uses: ./.github/workflows/update-repo.yml
+    secrets: inherit
+    with:
+      channel: ${{ inputs.channel }}
+
+  update-version:
+    if: "!inputs.redeploy && inputs.channel == 'release'"
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+    - uses: actions/checkout@v3
+    - run: echo "${{ inputs.version }}" > version.txt
+    - name: Commit changes
+      run: |
+        # from https://github.com/orgs/community/discussions/26560
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config user.name "github-actions[bot]"
+        git add .
+        git commit -m "Released ${{ inputs.version }}"
+        git push

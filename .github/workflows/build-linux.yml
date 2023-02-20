@@ -1,0 +1,165 @@
+name: Deploy repo to Pages
+
+on:
+  workflow_call:
+    inputs:
+      channel:
+        type: string
+        default: nightly
+      version:
+        type: string
+        default: "0.8.2"
+      changelog:
+        type: string
+        default: ""
+      versionsdbremote:
+        type: string
+        default: master
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.platform.ignore-failure || false }}
+    strategy:
+      fail-fast: false
+      matrix:
+        repo:
+        - mcpelauncher-manifest
+        - mcpelauncher-ui-manifest
+        - msa-manifest
+        platform:
+        - name: focal
+          container: buildpack-deps:focal
+          deps: apt-get update && apt-get install -y --no-install-recommends g++ clang cmake make git ca-certificates libssl-dev libpng-dev libx11-dev libxi-dev libcurl4-openssl-dev libudev-dev libevdev-dev libegl1-mesa-dev libssl-dev libasound2 qtbase5-dev qtwebengine5-dev qtdeclarative5-dev libqt5svg5-dev qml-module-qtquick2 qml-module-qtquick-layouts qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtquick-dialogs qml-module-qt-labs-settings qml-module-qt-labs-folderlistmodel qml-module-qtwebengine libssl-dev libcurl4-openssl-dev libuv1-dev libzip-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtwebengine5-dev qtdeclarative5-dev libqt5svg5-dev qml-module-qtquick2 qml-module-qtquick-layouts qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtquick-dialogs qml-module-qt-labs-settings qml-module-qt-labs-folderlistmodel
+          generator: DEB
+        - name: focal
+          container: ubuntu:focal
+          ignore-failure: true
+          deps: |
+            echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ focal main universe multiverse restricted" > /etc/apt/sources.list
+            echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ focal-updates main universe multiverse restricted" >> /etc/apt/sources.list
+            echo "deb [arch=arm64,armhf] http://ports.ubuntu.com/ubuntu-ports/ focal main universe multiverse restricted" >> /etc/apt/sources.list
+            echo "deb [arch=arm64,armhf] http://ports.ubuntu.com/ubuntu-ports/ focal-updates main universe multiverse restricted" >> /etc/apt/sources.list
+            dpkg --add-architecture arm64 && dpkg --add-architecture armhf && apt update && DEBIAN_FRONTEND=noninteractive apt install -y docker.io libfuse-dev:arm64 wget texinfo apt-transport-https vim-common qemu-user clang chrpath libstdc++-9-dev:arm64 libatomic1:arm64 wget cmake g++-arm-linux-gnueabihf g++-aarch64-linux-gnu patchelf git cmake pkg-config qtbase5-dev:arm64 qtwebengine5-dev:arm64 libssl-dev:arm64 libcurl4-openssl-dev:arm64 libpng-dev:arm64 libx11-dev:arm64 libxi-dev:arm64 libssl-dev:arm64 libudev-dev:arm64 libevdev-dev:arm64 libegl1-mesa-dev:arm64 libgl1-mesa-dev:arm64 libssl-dev:arm64 libuv1-dev:arm64 libzip-dev:arm64 libprotobuf-dev:arm64 protobuf-compiler qtdeclarative5-dev:arm64 libqt5svg5-dev:arm64 qml-module-qtwebengine:arm64 qml-module-qtquick2:arm64 qml-module-qtquick-layouts:arm64 qml-module-qtquick-controls:arm64 qml-module-qtquick-controls2:arm64 qml-module-qtquick-window2:arm64 qml-module-qtquick-dialogs:arm64 qml-module-qt-labs-settings:arm64 qml-module-qt-labs-folderlistmodel:arm64 jq curl binutils desktop-file-utils squashfs-tools qtdeclarative5-dev-tools:arm64 libssl-dev:arm64 libpulse-dev:arm64
+            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+            echo PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig/ >> $GITHUB_PATH
+            echo PATH=/usr/lib/aarch64-linux-gnu/qt5/bin/:$PATH >> $GITHUB_PATH
+            curl -L -O https://raw.githubusercontent.com/ChristopherHX/linux-packaging-scripts/main/arm64toolchain.txt
+          generator: DEB
+          cmakeflags:
+            mcpelauncher-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
+            mcpelauncher-ui-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
+            msa-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
+        - name: jammy
+          container: buildpack-deps:jammy
+          deps: apt-get update && apt-get install -y --no-install-recommends g++ clang cmake make git ca-certificates libssl-dev libpng-dev libx11-dev libxi-dev libcurl4-openssl-dev libudev-dev libevdev-dev libegl1-mesa-dev libssl-dev libasound2 qtbase5-dev qtwebengine5-dev qtdeclarative5-dev libqt5svg5-dev qml-module-qtquick2 qml-module-qtquick-layouts qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtquick-dialogs qml-module-qt-labs-settings qml-module-qt-labs-folderlistmodel qml-module-qtwebengine libssl-dev libcurl4-openssl-dev libuv1-dev libzip-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtwebengine5-dev qtdeclarative5-dev libqt5svg5-dev qml-module-qtquick2 qml-module-qtquick-layouts qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtquick-dialogs qml-module-qt-labs-settings qml-module-qt-labs-folderlistmodel
+          generator: DEB
+        - name: jammy
+          container: buildpack-deps:jammy
+          deps: apt-get update && apt-get install -y --no-install-recommends g++ clang cmake make git ca-certificates libssl-dev libpng-dev libx11-dev libxi-dev libcurl4-openssl-dev libudev-dev libevdev-dev libegl1-mesa-dev libssl-dev libasound2 qt6-base-dev libqt6opengl6-dev qt6-webengine-dev qt6-webengine-dev-tools qt6-declarative-dev qml6-module-qtquick qml6-module-qtquick-layouts qml6-module-qtquick-controls qml6-module-qtquick-window qml6-module-qtquick-dialogs qml6-module-qt-labs-settings qml6-module-qt-labs-folderlistmodel qml6-module-qtwebengine libssl-dev libcurl4-openssl-dev libuv1-dev libzip-dev libprotobuf-dev protobuf-compiler qt6-base-dev libqt6opengl6-dev qt6-webengine-dev qt6-declarative-dev libqt6svg6-dev qml6-module-qtquick-layouts qml6-module-qtquick-controls qml6-module-qtquick-controls qml6-module-qtquick-dialogs qml6-module-qt-labs-settings qml6-module-qt-labs-folderlistmodel
+          generator: DEB
+          branch:
+            mcpelauncher-manifest: qt6
+            mcpelauncher-ui-manifest: qt6
+          cmakeflags:
+            msa-manifest: -DQT_VERSION=6
+          pkg-deps: libc6, ca-certificates, qml6-module-qtquick, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-window, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, qml6-module-qtwebengine, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel
+          suffix: qt6
+        - name: jammy
+          container: ubuntu:jammy
+          ignore-failure: true
+          deps: |
+            echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ jammy main universe multiverse restricted" > /etc/apt/sources.list
+            echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ jammy-updates main universe multiverse restricted" >> /etc/apt/sources.list
+            echo "deb [arch=arm64,armhf] http://ports.ubuntu.com/ubuntu-ports/ jammy main universe multiverse restricted" >> /etc/apt/sources.list
+            echo "deb [arch=arm64,armhf] http://ports.ubuntu.com/ubuntu-ports/ jammy-updates main universe multiverse restricted" >> /etc/apt/sources.list
+            dpkg --add-architecture arm64 && dpkg --add-architecture armhf && apt update && DEBIAN_FRONTEND=noninteractive apt install -y docker.io libfuse-dev:arm64 wget texinfo apt-transport-https vim-common qemu-user clang chrpath libstdc++-10-dev:arm64 libatomic1:arm64 wget cmake g++-arm-linux-gnueabihf g++-aarch64-linux-gnu patchelf git cmake pkg-config qtbase5-dev:arm64 qtwebengine5-dev:arm64 libssl-dev:arm64 libcurl4-openssl-dev:arm64 libpng-dev:arm64 libx11-dev:arm64 libxi-dev:arm64 libssl-dev:arm64 libudev-dev:arm64 libevdev-dev:arm64 libegl1-mesa-dev:arm64 libgl1-mesa-dev:arm64 libssl-dev:arm64 libuv1-dev:arm64 libzip-dev:arm64 libprotobuf-dev:arm64 protobuf-compiler qtdeclarative5-dev:arm64 libqt5svg5-dev:arm64 qml-module-qtwebengine:arm64 qml-module-qtquick2:arm64 qml-module-qtquick-layouts:arm64 qml-module-qtquick-controls:arm64 qml-module-qtquick-controls2:arm64 qml-module-qtquick-window2:arm64 qml-module-qtquick-dialogs:arm64 qml-module-qt-labs-settings:arm64 qml-module-qt-labs-folderlistmodel:arm64 jq curl binutils desktop-file-utils squashfs-tools qtdeclarative5-dev-tools:arm64 libssl-dev:arm64 libpulse-dev:arm64
+            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+            echo PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig/ >> $GITHUB_PATH
+            echo PATH=/usr/lib/aarch64-linux-gnu/qt5/bin/:$PATH >> $GITHUB_PATH
+            curl -L -O https://raw.githubusercontent.com/ChristopherHX/linux-packaging-scripts/main/arm64toolchain.txt
+          generator: DEB
+          cmakeflags:
+            mcpelauncher-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
+            mcpelauncher-ui-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
+            msa-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
+        - name: kinetic
+          container: buildpack-deps:kinetic
+          deps: apt-get update && apt-get install -y --no-install-recommends g++ clang cmake make git ca-certificates libssl-dev libpng-dev libx11-dev libxi-dev libcurl4-openssl-dev libudev-dev libevdev-dev libegl1-mesa-dev libssl-dev libasound2 qt6-base-dev libqt6opengl6-dev qt6-webengine-dev qt6-webengine-dev-tools qt6-declarative-dev qml6-module-qtquick qml6-module-qtquick-layouts qml6-module-qtquick-controls qml6-module-qtquick-window qml6-module-qtquick-dialogs qml6-module-qt-labs-settings qml6-module-qt-labs-folderlistmodel qml6-module-qtwebengine libssl-dev libcurl4-openssl-dev libuv1-dev libzip-dev libprotobuf-dev protobuf-compiler qt6-base-dev libqt6opengl6-dev qt6-webengine-dev qt6-declarative-dev libqt6svg6-dev qml6-module-qtquick-layouts qml6-module-qtquick-controls qml6-module-qtquick-controls qml6-module-qtquick-dialogs qml6-module-qt-labs-settings qml6-module-qt-labs-folderlistmodel
+          generator: DEB
+          branch:
+            mcpelauncher-manifest: qt6
+            mcpelauncher-ui-manifest: qt6
+          cmakeflags:
+            msa-manifest: -DQT_VERSION=6
+          pkg-deps: libc6, ca-certificates, qml6-module-qtquick, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-window, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, qml6-module-qtwebengine, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel
+        - name: bullseye
+          container: buildpack-deps:bullseye
+          deps: apt-get update && apt-get install -y --no-install-recommends g++ clang cmake make git ca-certificates libssl-dev libpng-dev libx11-dev libxi-dev libcurl4-openssl-dev libudev-dev libevdev-dev libegl1-mesa-dev libssl-dev libasound2 qtbase5-dev qtwebengine5-dev qtdeclarative5-dev libqt5svg5-dev qml-module-qtquick2 qml-module-qtquick-layouts qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtquick-dialogs qml-module-qt-labs-settings qml-module-qt-labs-folderlistmodel qml-module-qtwebengine libssl-dev libcurl4-openssl-dev libuv1-dev libzip-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtwebengine5-dev qtdeclarative5-dev libqt5svg5-dev qml-module-qtquick2 qml-module-qtquick-layouts qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtquick-dialogs qml-module-qt-labs-settings qml-module-qt-labs-folderlistmodel
+          generator: DEB
+        - name: bookworm
+          container: buildpack-deps:bookworm
+          deps: apt-get update && apt-get install -y --no-install-recommends g++ clang cmake make git ca-certificates libssl-dev libpng-dev libx11-dev libxi-dev libcurl4-openssl-dev libudev-dev libevdev-dev libegl1-mesa-dev libssl-dev libasound2 qt6-base-dev libqt6opengl6-dev qt6-webengine-dev qt6-declarative-dev qml6-module-qtquick qml6-module-qtquick-layouts qml6-module-qtquick-controls qml6-module-qtquick-window qml6-module-qtquick-dialogs qml6-module-qt-labs-settings qml6-module-qt-labs-folderlistmodel qml6-module-qtwebengine libssl-dev libcurl4-openssl-dev libuv1-dev libzip-dev libprotobuf-dev protobuf-compiler qt6-base-dev libqt6opengl6-dev qt6-webengine-dev qt6-declarative-dev libqt6svg6-dev qml6-module-qtquick-layouts qml6-module-qtquick-controls qml6-module-qtquick-controls qml6-module-qtquick-dialogs qml6-module-qt-labs-settings qml6-module-qt-labs-folderlistmodel
+          generator: DEB
+          branch:
+            mcpelauncher-manifest: qt6
+            mcpelauncher-ui-manifest: qt6
+          cmakeflags:
+            msa-manifest: -DQT_VERSION=6
+          pkg-deps: libc6, ca-certificates, qml6-module-qtquick, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-window, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, qml6-module-qtwebengine, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel
+        - name: fedora-36
+          container: fedora:36
+          deps: dnf install -y gcc-c++ clang cmake make git ca-certificates libstdc++ glibc-devel libpng-devel zlib-devel libX11-devel libXi-devel libcurl-devel systemd-devel libevdev-devel mesa-libEGL-devel alsa-lib pulseaudio-libs mesa-dri-drivers systemd-devel libXtst-devel openssl-devel qt5-qtbase-devel qt5-qtwebengine-devel qt5-qtdeclarative-devel qt5-qtsvg-devel qt5-qtquickcontrols qt5-qtquickcontrols2 libuv-devel libzip-devel protobuf-devel protobuf-compiler qt5-qtbase-devel qt5-qtwebengine-devel qt5-qtdeclarative-devel qt5-qtsvg-devel qt5-qtquickcontrols qt5-qtquickcontrols2 fedora-packager rpmdevtools
+          generator: RPM
+        - name: fedora-37
+          container: fedora:37
+          deps: dnf install -y gcc-c++ clang cmake make git ca-certificates libstdc++ glibc-devel libpng-devel zlib-devel libX11-devel libXi-devel libcurl-devel systemd-devel libevdev-devel mesa-libEGL-devel alsa-lib pulseaudio-libs mesa-dri-drivers systemd-devel libXtst-devel openssl-devel qt5-qtbase-devel qt5-qtwebengine-devel qt5-qtdeclarative-devel qt5-qtsvg-devel qt5-qtquickcontrols qt5-qtquickcontrols2 libuv-devel libzip-devel protobuf-devel protobuf-compiler qt5-qtbase-devel qt5-qtwebengine-devel qt5-qtdeclarative-devel qt5-qtsvg-devel qt5-qtquickcontrols qt5-qtquickcontrols2 fedora-packager rpmdevtools
+          generator: RPM
+        include:
+        - cmakeflags:
+            mcpelauncher-manifest: -DENABLE_DEV_PATHS=OFF
+            mcpelauncher-ui-manifest: -DLAUNCHER_VERSION_NAME="${{ inputs.version }}.${{ github.run_id }}.${{ github.run_attempt }}" -DLAUNCHER_VERSION_CODE="${{ github.run_id }}" -DLAUNCHER_CHANGE_LOG="Launcher ${{ inputs.version }}<br/>${{ inputs.changelog }}" -DLAUNCHER_VERSIONDB_URL=https://raw.githubusercontent.com/minecraft-linux/mcpelauncher-versiondb/${{ inputs.versionsdbremote }}
+            msa-manifest: -DENABLE_MSA_QT_UI=ON -DMSA_UI_PATH_DEV=OFF 
+
+    container: ${{ matrix.platform.container}}
+    steps:
+    - name: Install Deps
+      run: ${{ matrix.platform.deps }}
+      shell: bash
+    - name: Get Sources
+      run: |
+        git clone --recursive https://github.com/minecraft-linux/${{ matrix.repo }} mcpelauncher ${{ matrix.platform.branch[matrix.repo] && format('-b {0}', matrix.platform.branch[matrix.repo]) }}
+        mv mcpelauncher/CMakeLists.txt mcpelauncher/CMakeLists.org.txt
+    - name: Create CMakeLists.txt
+      run: |
+        cmake_minimum_required(VERSION 3.0)
+        project(${{ matrix.repo }}${{ matrix.platform.suffix && format('-{0}', matrix.platform.suffix) }})
+        include(./CMakeLists.org.txt)
+
+        set(CPACK_GENERATOR "TGZ;${{ matrix.platform.generator }}")
+        set(CPACK_PACKAGE_CONTACT "https://github.com/minecraft-linux/${{ matrix.repo }}/issues")
+        set(CPACK_DEBIAN_PACKAGE_DEPENDS "${{ matrix.platform.pkg-deps || 'libc6, ca-certificates, qml-module-qtquick2, qml-module-qtquick-layouts, qml-module-qtquick-controls, qml-module-qtquick-controls2, qml-module-qtquick-window2, qml-module-qtquick-dialogs, qml-module-qt-labs-settings, qml-module-qt-labs-folderlistmodel' }}")
+        set(CPACK_DEBIAN_PACKAGE_VERSION "${{ inputs.version }}.${{ github.run_id }}.${{ github.run_attempt }}~${{ matrix.platform.name }}")
+        set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
+        set(CPACK_RPM_PACKAGE_VERSION "${{ inputs.version }}.${{ github.run_id }}.${{ github.run_attempt }}~${{ matrix.platform.name }}")
+        set(CPACK_RPM_SPEC_MORE_DEFINE "%define __spec_install_post /bin/true")
+        set(CPACK_RPM_REQUIRES_EXCLUDE_FROM "share/mcpelauncher/.*")
+        set(CPACK_RPM_FILE_NAME RPM-DEFAULT)
+
+        include(CPack)
+      shell: cp {0} mcpelauncher/CMakeLists.txt
+    - name: Configure
+      run: CC=clang CXX=clang++ cmake -S mcpelauncher -B mcpelauncher-build -DCMAKE_BUILD_TYPE=Release ${{ matrix.cmakeflags[matrix.repo] }} ${{ matrix.platform.cmakeflags[matrix.repo] }}
+    - name: Package Source
+      if: "false"
+      run: cmake --build mcpelauncher-build --target package_source --parallel
+    - name: Build
+      run: cmake --build mcpelauncher-build --target package --parallel
+    - name: Upload artifacts
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ matrix.platform.name }}${{inputs.channel && inputs.channel != 'release' && format('-{0}', inputs.channel)}}
+        path: |
+          mcpelauncher-build/*.tar.*
+          mcpelauncher-build/*.deb
+          mcpelauncher-build/*.rpm

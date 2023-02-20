@@ -1,0 +1,351 @@
+
+name: Deploy repo to Pages
+
+on:
+  workflow_call:
+    inputs:
+      channel:
+        type: string
+        default: nightly
+      config:
+        type: string
+        default: |-
+          [
+            {
+              "artifact": "focal",
+              "distro": "focal",
+              "component": "main",
+              "type": "apt",
+              "channel": "release"
+            },
+            {
+              "artifact": "jammy",
+              "distro": "jammy",
+              "component": "main",
+              "type": "apt",
+              "channel": "release"
+            },
+            {
+              "artifact": "kinetic",
+              "distro": "kinetic",
+              "component": "main",
+              "type": "apt",
+              "channel": "release"
+            },
+            {
+              "artifact": "bullseye",
+              "distro": "bullseye",
+              "component": "main",
+              "type": "apt",
+              "channel": "release"
+            },
+            {
+              "artifact": "bookworm",
+              "distro": "bookworm",
+              "component": "main",
+              "type": "apt",
+              "channel": "release"
+            },
+            {
+              "artifact": "fedora-36",
+              "path": "fedora-36",
+              "type": "rpm",
+              "channel": "release"
+            },
+            {
+              "artifact": "fedora-37",
+              "path": "fedora-37",
+              "type": "rpm",
+              "channel": "release"
+            },
+            {
+              "artifact": "focal-nightly",
+              "distro": "focal-nightly",
+              "component": "main",
+              "type": "apt",
+              "channel": "nightly"
+            },
+            {
+              "artifact": "jammy-nightly",
+              "distro": "jammy-nightly",
+              "component": "main",
+              "type": "apt",
+              "channel": "nightly"
+            },
+            {
+              "artifact": "kinetic-nightly",
+              "distro": "kinetic-nightly",
+              "component": "main",
+              "type": "apt",
+              "channel": "nightly"
+            },
+            {
+              "artifact": "bullseye-nightly",
+              "distro": "bullseye-nightly",
+              "component": "main",
+              "type": "apt",
+              "channel": "nightly"
+            },
+            {
+              "artifact": "bookworm-nightly",
+              "distro": "bookworm-nightly",
+              "component": "main",
+              "type": "apt",
+              "channel": "nightly"
+            },
+            {
+              "artifact": "fedora-36-nightly",
+              "path": "fedora-36-nightly",
+              "type": "rpm",
+              "channel": "nightly"
+            },
+            {
+              "artifact": "fedora-37-nightly",
+              "path": "fedora-37-nightly",
+              "type": "rpm",
+              "channel": "nightly"
+            }
+          ]
+      channelconfig:
+        type: string
+        default: |-
+          {
+            "nightly": 2,
+            "release": 5
+          }
+    secrets:
+      GPG_PRIVATE_KEY: {}
+jobs:
+  deploy:
+    # Allow one concurrent deployment
+    concurrency:
+      group: "pages"
+      cancel-in-progress: true
+    # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    env:
+      BASE_URL: https://${{ github.repository_owner }}.github.io${{ github.repository_owner != github.event.repository.name && format('/{0}', github.event.repository.name) || '' }}
+      REPO_NAME: ${{ github.repository_owner != github.event.repository.name && format('{0}-{1}', github.repository_owner, github.event.repository.name) || github.repository_owner }}
+    steps:
+      - name: Import gpg private key
+        run: |
+          echo "$GPG_PRIVATE_KEY" | gpg --import
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+
+      - name: install actions/artifact
+        run: npm install @actions/artifact
+
+      - name: create release index and sync packages
+        uses: actions/github-script@v6
+        with:
+          github-token: _
+          script: |
+            var artifact = require("@actions/artifact");
+            var config = JSON.parse(${{ tojson(inputs.config) }});
+            var rootUrl = "${{ env.BASE_URL }}";
+            var channelconfig = JSON.parse(${{ tojson(inputs.channelconfig) }});
+            var path = require("path");
+            var fs = require("fs");
+            var index = {};
+            try {
+              const response = await fetch(`${rootUrl}/index.json`);
+              index = await response.json();
+            } catch {
+              console.log("Previous index is unavailable");
+            }
+            const artifactClient = artifact.create()
+            for(var repo of config) {
+              try {
+                const artifactName = repo.artifact;
+                const path = `packages/${artifactName}`
+                const options = {
+                    createArtifactFolder: false
+                }
+
+                const downloadResponse = await artifactClient.downloadArtifact(artifactName, path, options)
+              } catch {
+
+              }
+            }
+            const globber = await glob.create("packages/**", { matchDirectories: false });
+            var packages = [];
+            for await (const file of globber.globGenerator()) {
+              var rfile = path.relative(path.join(process.cwd(), "packages"), file);
+              packages.push(rfile);
+            }
+            if(index.versions) {
+              for(var channel in index.versions) {
+                var builds = index.versions[channel];
+                if(builds) {
+                  while(builds.length > (channelconfig[channel] || 0)) {
+                    builds.shift();
+                  }
+                  for(var build of builds) {
+                    if(build.buildfiles) {
+                      for(var f of build.buildfiles) {
+                        console.log(JSON.stringify(f));
+                        var fullpath = path.join("packages", f.pkgpath);
+                        fs.mkdirSync(path.dirname(fullpath), {recursive: true});
+                        await exec.exec("curl", ["-L", `${rootUrl}/${f.path}`, "--output", fullpath]);
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            fs.writeFileSync("release-index.json", JSON.stringify({ packages: packages, index }));
+      
+      - name: add cppfw repo to install myci scripts from
+        uses: myci-actions/add-deb-repo@master
+        with:
+          repo: deb http://gagis.hopto.org/repo/cppfw/$(lsb_release --id --short | tr '[:upper:]' '[:lower:]') $(lsb_release --codename --short) main
+          repo-name: cppfw
+          keys-asc: http://gagis.hopto.org/repo/cppfw/pubkey.gpg
+      - name: install debian package tools
+        run: |
+          sudo apt --quiet update
+          sudo apt --quiet install --assume-yes dpkg-dev debhelper devscripts myci rpm
+      - name: Install freight
+        run: |
+          git clone https://github.com/freight-team/freight.git
+          make -C freight && sudo make -C freight install
+
+      - name: rpm setup signing macro
+        run: |
+          first_key_email=$(gpg --list-keys | sed -E -n -e 's/.*<([^ >]*)>.*/\1/p' | head -1)
+          echo "%_signature gpg" > ~/.rpmmacros
+          echo "%_gpg_name \"$first_key_email\"" >> ~/.rpmmacros
+
+      - name: Add package
+        uses: actions/github-script@v6
+        with:
+          github-token: _
+          script: |
+            var config = JSON.parse(${{ tojson(inputs.config) }});
+            var path = require("path");
+            var fs = require("fs");
+            var rpmrepos = [];
+            for(var repo of config) {
+              if(repo.type === "apt") {
+                const globber = await glob.create(`packages/${repo.artifact}/**/*.deb`, { matchDirectories: false });
+                var packages = [];
+                for await (const file of globber.globGenerator()) {
+                  await exec.exec("myci-freight-add.sh", ["--base-dir", process.cwd(), "--repo", "webpage/deb", "--distro", repo.distro, "--component", repo.component, file]);
+                }
+              } else if(repo.type === "rpm") {
+                const globber = await glob.create(`packages/${repo.artifact}/**/*.rpm`, { matchDirectories: false });
+                var packages = [];
+                fs.mkdirSync(path.join("webpage", repo.path), {recursive: true});
+                for await (const file of globber.globGenerator()) {
+                  var destPath = path.join("webpage", repo.path, path.basename(file));
+                  console.log(`copy ${file} to ${destPath}`);
+                  fs.copyFileSync(file, destPath);
+                  await exec.exec("rpm", ["--addsign", destPath]);
+                }
+                rpmrepos.push(`createrepo ${path.join("/webpage", repo.path)}`);
+              }
+            }
+            if(rpmrepos.length > 0) {
+              await exec.exec("docker", ["run", "--rm", "-v", `${path.join(process.cwd(), "webpage")}:/webpage`, "fedora:latest", "bash", "-c", `dnf install -y createrepo && ${rpmrepos.join(" && ")}`]);
+            }
+
+      - name: Fix webpage permissions
+        run: |
+          sudo chown -R "$UID:$UID" webpage
+
+      - name: Add default html
+        run: |
+          <html>
+          <body>
+          <h1>Debian and Ubuntu apt repos</h1>
+          <p>deb ${{ env.BASE_URL }}/deb focal main</p>
+          <p>deb ${{ env.BASE_URL }}/deb jammy main</p>
+          <p>deb ${{ env.BASE_URL }}/deb kinetic main</p>
+          <p>deb ${{ env.BASE_URL }}/deb bullseye main</p>
+          <p>deb ${{ env.BASE_URL }}/deb bookworm main</p>
+          <p>curl -sS ${{ env.BASE_URL }}/deb/pubkey.gpg | sudo tee -a /etc/apt/trusted.gpg.d/${{ env.REPO_NAME }}.asc</p>
+          <h1>Fedora</h1>
+          <h2>36</h2>
+          <p>
+          [${{ env.REPO_NAME }}]<br/>
+          name=${{ env.REPO_NAME }}<br/>
+          baseurl=${{ env.BASE_URL }}/fedora-36<br/>
+          enabled=1<br/>
+          countme=1<br/>
+          repo_gpgcheck=0<br/>
+          type=rpm<br/>
+          gpgcheck=1<br/>
+          skip_if_unavailable=False<br/>
+          gpgkey=${{ env.BASE_URL }}/deb/pubkey.gpg<br/>
+          </p>
+          <h2>37</h2>
+          <p>
+          [${{ env.REPO_NAME }}]<br/>
+          name=${{ env.REPO_NAME }}<br/>
+          baseurl=${{ env.BASE_URL }}/fedora-37<br/>
+          enabled=1<br/>
+          countme=1<br/>
+          repo_gpgcheck=0<br/>
+          type=rpm<br/>
+          gpgcheck=1<br/>
+          skip_if_unavailable=False<br/>
+          gpgkey=${{ env.BASE_URL }}/deb/pubkey.gpg<br/>
+          </p>
+          </body>
+          </html>
+        shell: cp {0} webpage/index.html
+
+      - name: create archive index
+        uses: actions/github-script@v6
+        with:
+          github-token: _
+          script: |
+            var path = require("path");
+            var fs = require("fs");
+            var releaseIndex = JSON.parse(fs.readFileSync("release-index.json", { encoding: "utf8" }));
+            var index = releaseIndex.index || {};
+            const globber = await glob.create("webpage/**", { matchDirectories: false });
+            var allfiles = [];
+            var buildmap = {};
+            var buildfiles = [];
+            for(pkg of releaseIndex.packages) {
+              buildmap[path.basename(pkg)] = pkg;
+            }
+            for await (const file of globber.globGenerator()) {
+              var rfile = path.relative(path.join(process.cwd(), "webpage"), file);
+              allfiles.push(rfile);
+              var pkgpath = buildmap[path.basename(file)];
+              if(pkgpath) {
+                buildfiles.push({ pkgpath, path: rfile });
+              }
+            }
+            index.allfiles = allfiles;
+            index.packages = releaseIndex.packages;
+            var channel = ${{ tojson(inputs.channel) }};
+            if(!index.versions) {
+              index.versions = {};
+            }
+            var builds = index.versions[channel];
+            if(!builds) {
+              builds = index.versions[channel] = [];
+            }
+            builds.push({ buildfiles });
+            fs.writeFileSync("webpage/index.json", JSON.stringify(index));
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: 'webpage'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1

@@ -1,0 +1,38 @@
+name: Deploy Nightly
+
+on:
+  push:
+  schedule:
+  - cron:  '30 7 * * *'
+  workflow_dispatch:
+
+jobs:
+  pre-build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - run: npm install -g semver
+    - run: echo "version=$(semver "$(cat version.txt)" -i patch)" > $GITHUB_OUTPUT
+      id: out
+    outputs:
+      version: ${{ steps.out.outputs.version }}
+
+  build:
+    needs: pre-build
+    uses: ./.github/workflows/build-linux.yml
+    with:
+      channel: nightly
+      version: ${{ needs.pre-build.outputs.version }}
+      changelog: "New Nightly Snapshot"
+      versionsdbremote: master
+
+  deploy:
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    needs: build
+    uses: ./.github/workflows/update-repo.yml
+    secrets: inherit
+    with:
+      channel: nightly
