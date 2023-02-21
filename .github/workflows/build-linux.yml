@@ -1,4 +1,4 @@
-name: Deploy repo to Pages
+name: Build linux packages
 
 on:
   workflow_call:
@@ -62,7 +62,7 @@ jobs:
             mcpelauncher-ui-manifest: qt6
           cmakeflags:
             msa-manifest: -DQT_VERSION=6
-          pkg-deps: libc6, ca-certificates, qml6-module-qtquick, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-window, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, qml6-module-qtwebengine, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel
+          pkg-deps: libc6, ca-certificates, qml6-module-qtquick, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-window, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, qml6-module-qtwebengine, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, , libqt6svg6, libqt6concurrent6, libqt6webenginewidgets6, libzip4, qml6-module-qtqml-workerscript, qml6-module-qt-labs-platform, qml6-module-qtquick-templates
           suffix: qt6
         - name: jammy
           container: ubuntu:jammy
@@ -91,7 +91,7 @@ jobs:
             mcpelauncher-ui-manifest: qt6
           cmakeflags:
             msa-manifest: -DQT_VERSION=6
-          pkg-deps: libc6, ca-certificates, qml6-module-qtquick, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-window, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, qml6-module-qtwebengine, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel
+          pkg-deps: libc6, ca-certificates, qml6-module-qtquick, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-window, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, qml6-module-qtwebengine, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, libqt6svg6, libqt6concurrent6, libqt6webenginewidgets6, libzip4, qml6-module-qtqml-workerscript, qml6-module-qt-labs-platform, qml6-module-qtquick-templates
         - name: bullseye
           container: buildpack-deps:bullseye
           deps: apt-get update && apt-get install -y --no-install-recommends g++ clang cmake make git ca-certificates libssl-dev libpng-dev libx11-dev libxi-dev libcurl4-openssl-dev libudev-dev libevdev-dev libegl1-mesa-dev libssl-dev libasound2 qtbase5-dev qtwebengine5-dev qtdeclarative5-dev libqt5svg5-dev qml-module-qtquick2 qml-module-qtquick-layouts qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtquick-dialogs qml-module-qt-labs-settings qml-module-qt-labs-folderlistmodel qml-module-qtwebengine libssl-dev libcurl4-openssl-dev libuv1-dev libzip-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtwebengine5-dev qtdeclarative5-dev libqt5svg5-dev qml-module-qtquick2 qml-module-qtquick-layouts qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtquick-dialogs qml-module-qt-labs-settings qml-module-qt-labs-folderlistmodel
@@ -105,7 +105,7 @@ jobs:
             mcpelauncher-ui-manifest: qt6
           cmakeflags:
             msa-manifest: -DQT_VERSION=6
-          pkg-deps: libc6, ca-certificates, qml6-module-qtquick, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-window, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, qml6-module-qtwebengine, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel
+          pkg-deps: libc6, ca-certificates, qml6-module-qtquick, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-window, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, qml6-module-qtwebengine, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, libqt6svg6, libqt6concurrent6, libqt6webenginewidgets6, libzip4, qml6-module-qtqml-workerscript, qml6-module-qt-labs-platform, qml6-module-qtquick-templates
         - name: fedora-36
           container: fedora:36
           deps: dnf install -y gcc-c++ clang cmake make git ca-certificates libstdc++ glibc-devel libpng-devel zlib-devel libX11-devel libXi-devel libcurl-devel systemd-devel libevdev-devel mesa-libEGL-devel alsa-lib pulseaudio-libs mesa-dri-drivers systemd-devel libXtst-devel openssl-devel qt5-qtbase-devel qt5-qtwebengine-devel qt5-qtdeclarative-devel qt5-qtsvg-devel qt5-qtquickcontrols qt5-qtquickcontrols2 libuv-devel libzip-devel protobuf-devel protobuf-compiler qt5-qtbase-devel qt5-qtwebengine-devel qt5-qtdeclarative-devel qt5-qtsvg-devel qt5-qtquickcontrols qt5-qtquickcontrols2 fedora-packager rpmdevtools
