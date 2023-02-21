@@ -31,6 +31,7 @@ jobs:
           container: buildpack-deps:focal
           deps: apt-get update && apt-get install -y --no-install-recommends g++ clang cmake make git ca-certificates libssl-dev libpng-dev libx11-dev libxi-dev libcurl4-openssl-dev libudev-dev libevdev-dev libegl1-mesa-dev libssl-dev libasound2 qtbase5-dev qtwebengine5-dev qtdeclarative5-dev libqt5svg5-dev qml-module-qtquick2 qml-module-qtquick-layouts qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtquick-dialogs qml-module-qt-labs-settings qml-module-qt-labs-folderlistmodel qml-module-qtwebengine libssl-dev libcurl4-openssl-dev libuv1-dev libzip-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtwebengine5-dev qtdeclarative5-dev libqt5svg5-dev qml-module-qtquick2 qml-module-qtquick-layouts qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtquick-dialogs qml-module-qt-labs-settings qml-module-qt-labs-folderlistmodel
           generator: DEB
+          pkg-deps: libc6, ca-certificates, qml-module-qtquick2, qml-module-qtquick-layouts, qml-module-qtquick-controls, qml-module-qtquick-controls2, qml-module-qtquick-window2, qml-module-qtquick-dialogs, qml-module-qt-labs-settings, qml-module-qt-labs-folderlistmodel, libqt5svg5, libqt5concurrent5, libqt5webenginewidgets5, libzip5, qml-module-qtquick-templates2
         - name: focal
           container: ubuntu:focal
           ignore-failure: true
@@ -49,6 +50,7 @@ jobs:
             mcpelauncher-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
             mcpelauncher-ui-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
             msa-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
+          pkg-deps: libc6, ca-certificates, qml-module-qtquick2, qml-module-qtquick-layouts, qml-module-qtquick-controls, qml-module-qtquick-controls2, qml-module-qtquick-window2, qml-module-qtquick-dialogs, qml-module-qt-labs-settings, qml-module-qt-labs-folderlistmodel, libqt5svg5, libqt5concurrent5, libqt5webenginewidgets5, libzip5, qml-module-qtquick-templates2
         - name: jammy
           container: buildpack-deps:jammy
           deps: apt-get update && apt-get install -y --no-install-recommends g++ clang cmake make git ca-certificates libssl-dev libpng-dev libx11-dev libxi-dev libcurl4-openssl-dev libudev-dev libevdev-dev libegl1-mesa-dev libssl-dev libasound2 qtbase5-dev qtwebengine5-dev qtdeclarative5-dev libqt5svg5-dev qml-module-qtquick2 qml-module-qtquick-layouts qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtquick-dialogs qml-module-qt-labs-settings qml-module-qt-labs-folderlistmodel qml-module-qtwebengine libssl-dev libcurl4-openssl-dev libuv1-dev libzip-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtwebengine5-dev qtdeclarative5-dev libqt5svg5-dev qml-module-qtquick2 qml-module-qtquick-layouts qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtquick-dialogs qml-module-qt-labs-settings qml-module-qt-labs-folderlistmodel
@@ -62,7 +64,7 @@ jobs:
             mcpelauncher-ui-manifest: qt6
           cmakeflags:
             msa-manifest: -DQT_VERSION=6
-          pkg-deps: libc6, ca-certificates, qml6-module-qtquick, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-window, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, qml6-module-qtwebengine, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, , libqt6svg6, libqt6concurrent6, libqt6webenginewidgets6, libzip4, qml6-module-qtqml-workerscript, qml6-module-qt-labs-platform, qml6-module-qtquick-templates
+          pkg-deps: libc6, ca-certificates, qml6-module-qtquick, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-window, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, qml6-module-qtwebengine, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, libqt6svg6, libqt6concurrent6, libqt6webenginewidgets6, libzip4, qml6-module-qtqml-workerscript, qml6-module-qt-labs-platform, qml6-module-qtquick-templates
           suffix: qt6
         - name: jammy
           container: ubuntu:jammy
@@ -137,7 +139,7 @@ jobs:
 
         set(CPACK_GENERATOR "TGZ;${{ matrix.platform.generator }}")
         set(CPACK_PACKAGE_CONTACT "https://github.com/minecraft-linux/${{ matrix.repo }}/issues")
-        set(CPACK_DEBIAN_PACKAGE_DEPENDS "${{ matrix.platform.pkg-deps || 'libc6, ca-certificates, qml-module-qtquick2, qml-module-qtquick-layouts, qml-module-qtquick-controls, qml-module-qtquick-controls2, qml-module-qtquick-window2, qml-module-qtquick-dialogs, qml-module-qt-labs-settings, qml-module-qt-labs-folderlistmodel' }}")
+        set(CPACK_DEBIAN_PACKAGE_DEPENDS "${{ matrix.platform.pkg-deps || 'libc6, ca-certificates, qml-module-qtquick2, qml-module-qtquick-layouts, qml-module-qtquick-controls, qml-module-qtquick-controls2, qml-module-qtquick-window2, qml-module-qtquick-dialogs, qml-module-qt-labs-settings, qml-module-qt-labs-folderlistmodel, libqt5svg5, libqt5concurrent5, libqt5webenginewidgets5, libzip4, qml-module-qtquick-templates2' }}")
         set(CPACK_DEBIAN_PACKAGE_VERSION "${{ inputs.version }}.${{ github.run_id }}.${{ github.run_attempt }}~${{ matrix.platform.name }}")
         set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
         set(CPACK_RPM_PACKAGE_VERSION "${{ inputs.version }}.${{ github.run_id }}.${{ github.run_attempt }}~${{ matrix.platform.name }}")
