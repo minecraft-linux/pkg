@@ -34,11 +34,13 @@ jobs:
             curl -L https://github.com/Kitware/CMake/releases/download/v3.16.2/cmake-3.16.2-Linux-x86_64.tar.gz --output cmake.tar.gz
             tar --no-same-owner -xf cmake.tar.gz
             echo "$PWD/cmake-3.16.2-Linux-x86_64/bin" > $GITHUB_PATH
+            curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.6/clang+llvm-15.0.6-x86_64-linux-gnu-ubuntu-18.04.tar.xz --output llvm.tar.xz
+            tar --no-same-owner -xf llvm.tar.xz
+            echo "$PWD/clang+llvm-15.0.6-x86_64-linux-gnu-ubuntu-18.04/bin" >> $GITHUB_PATH
           generator: DEB
           pkg-deps: libc6, ca-certificates, qml-module-qtquick2, qml-module-qtquick-layouts, qml-module-qtquick-controls, qml-module-qtquick-controls2, qml-module-qtquick-window2, qml-module-qtquick-dialogs, qml-module-qt-labs-settings, qml-module-qt-labs-folderlistmodel, libqt5svg5, libqt5concurrent5, libqt5webenginewidgets5, libzip5, qml-module-qtquick-templates2
         - name: bionic
           container: ubuntu:bionic
-          ignore-failure: true
           deps: |
             echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ bionic main universe multiverse restricted" > /etc/apt/sources.list
             echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ bionic-updates main universe multiverse restricted" >> /etc/apt/sources.list
@@ -52,6 +54,9 @@ jobs:
             curl -L https://github.com/Kitware/CMake/releases/download/v3.16.2/cmake-3.16.2-Linux-x86_64.tar.gz --output cmake.tar.gz
             tar --no-same-owner -xf cmake.tar.gz
             echo "$PWD/cmake-3.16.2-Linux-x86_64/bin" > $GITHUB_PATH
+            curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.6/clang+llvm-15.0.6-x86_64-linux-gnu-ubuntu-18.04.tar.xz --output llvm.tar.xz
+            tar --no-same-owner -xf llvm.tar.xz
+            echo "$PWD/clang+llvm-15.0.6-x86_64-linux-gnu-ubuntu-18.04/bin" >> $GITHUB_PATH
           generator: DEB
           cmakeflags:
             mcpelauncher-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
@@ -65,7 +70,6 @@ jobs:
           pkg-deps: libc6, ca-certificates, qml-module-qtquick2, qml-module-qtquick-layouts, qml-module-qtquick-controls, qml-module-qtquick-controls2, qml-module-qtquick-window2, qml-module-qtquick-dialogs, qml-module-qt-labs-settings, qml-module-qt-labs-folderlistmodel, libqt5svg5, libqt5concurrent5, libqt5webenginewidgets5, libzip5, qml-module-qtquick-templates2
         - name: focal
           container: ubuntu:focal
-          ignore-failure: true
           deps: |
             echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ focal main universe multiverse restricted" > /etc/apt/sources.list
             echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ focal-updates main universe multiverse restricted" >> /etc/apt/sources.list
@@ -99,7 +103,6 @@ jobs:
           suffix: qt6
         - name: jammy
           container: ubuntu:jammy
-          ignore-failure: true
           deps: |
             echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ jammy main universe multiverse restricted" > /etc/apt/sources.list
             echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ jammy-updates main universe multiverse restricted" >> /etc/apt/sources.list
@@ -127,13 +130,12 @@ jobs:
           pkg-deps: libc6, ca-certificates, qml6-module-qtquick, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-window, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, qml6-module-qtwebengine, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, libqt6svg6, libqt6concurrent6, libqt6webenginewidgets6, libzip4, qml6-module-qtqml-workerscript, qml6-module-qt-labs-platform, qml6-module-qtquick-templates
         - name: kinetic
           container: ubuntu:kinetic
-          ignore-failure: true
           deps: |
             echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ kinetic main universe multiverse restricted" > /etc/apt/sources.list
             echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ kinetic-updates main universe multiverse restricted" >> /etc/apt/sources.list
             echo "deb [arch=arm64,armhf] http://ports.ubuntu.com/ubuntu-ports/ kinetic main universe multiverse restricted" >> /etc/apt/sources.list
             echo "deb [arch=arm64,armhf] http://ports.ubuntu.com/ubuntu-ports/ kinetic-updates main universe multiverse restricted" >> /etc/apt/sources.list
-            dpkg --add-architecture arm64 && dpkg --add-architecture armhf && apt update && DEBIAN_FRONTEND=noninteractive apt install -y docker.io libfuse-dev:arm64 wget texinfo apt-transport-https vim-common qemu-user clang chrpath libstdc++-10-dev:arm64 libatomic1:arm64 wget cmake g++-arm-linux-gnueabihf g++-aarch64-linux-gnu patchelf git cmake pkg-config libssl-dev:arm64 libcurl4-openssl-dev:arm64 libpng-dev:arm64 libx11-dev:arm64 libxi-dev:arm64 libssl-dev:arm64 libudev-dev:arm64 libevdev-dev:arm64 libegl1-mesa-dev:arm64 libgl1-mesa-dev:arm64 libssl-dev:arm64 libuv1-dev:arm64 libzip-dev:arm64 libprotobuf-dev:arm64 protobuf-compiler jq curl binutils desktop-file-utils squashfs-tools libssl-dev:arm64 libpulse-dev:arm64 qt6-base-dev:arm64 libqt6opengl6-dev:arm64 qt6-webengine-dev:arm64 qt6-webengine-dev-tools:arm64 qt6-declarative-dev:arm64 qml6-module-qtquick:arm64 qml6-module-qtquick-layouts:arm64 qml6-module-qtquick-controls:arm64 qml6-module-qtquick-window:arm64 qml6-module-qtquick-dialogs:arm64 qml6-module-qt-labs-settings:arm64 qml6-module-qt-labs-folderlistmodel:arm64 qml6-module-qtwebengine:arm64
+            dpkg --add-architecture arm64 && dpkg --add-architecture armhf && apt update && DEBIAN_FRONTEND=noninteractive apt install -y docker.io libfuse-dev:arm64 wget texinfo apt-transport-https vim-common qemu-user clang chrpath libstdc++-10-dev:arm64 libatomic1:arm64 wget cmake g++-arm-linux-gnueabihf g++-aarch64-linux-gnu patchelf git cmake pkg-config libssl-dev:arm64 libcurl4-openssl-dev:arm64 libpng-dev:arm64 libx11-dev:arm64 libxi-dev:arm64 libssl-dev:arm64 libudev-dev:arm64 libevdev-dev:arm64 libegl1-mesa-dev:arm64 libgl1-mesa-dev:arm64 libssl-dev:arm64 libuv1-dev:arm64 libzip-dev:arm64 libprotobuf-dev:arm64 protobuf-compiler jq curl binutils desktop-file-utils squashfs-tools libssl-dev:arm64 libpulse-dev:arm64 qt6-base-dev:arm64 libqt6opengl6-dev:arm64 qt6-webengine-dev:arm64 qt6-webengine-dev-tools:arm64 qt6-declarative-dev:arm64 qml6-module-qtquick:arm64 qml6-module-qtquick-layouts:arm64 qml6-module-qtquick-controls:arm64 qml6-module-qtquick-window:arm64 qml6-module-qtquick-dialogs:arm64 qml6-module-qt-labs-settings:arm64 qml6-module-qt-labs-folderlistmodel:arm64 qml6-module-qtwebengine:arm64 qt6-base-dev:arm64 libqt6opengl6-dev:arm64 qt6-webengine-dev:arm64 qt6-declarative-dev:arm64 libqt6svg6-dev:arm64 qml6-module-qtquick-layouts:arm64 qml6-module-qtquick-controls:arm64 qml6-module-qtquick-controls:arm64 qml6-module-qtquick-dialogs:arm64 qml6-module-qt-labs-settings:arm64 qml6-module-qt-labs-folderlistmodel:arm64
             docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
             echo PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig/ >> $GITHUB_PATH
             echo PATH=/usr/lib/aarch64-linux-gnu/qt6/bin/:$PATH >> $GITHUB_PATH
@@ -149,6 +151,7 @@ jobs:
           pkg-deps: libc6, ca-certificates, qml6-module-qtquick, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-window, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, qml6-module-qtwebengine, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, libqt6svg6, libqt6concurrent6, libqt6webenginewidgets6, libzip4, qml6-module-qtqml-workerscript, qml6-module-qt-labs-platform, qml6-module-qtquick-templates
         - name: lunar
           container: buildpack-deps:lunar
+          ignore-failure: true
           deps: apt-get update && apt-get install -y --no-install-recommends g++ clang cmake make git ca-certificates libssl-dev libpng-dev libx11-dev libxi-dev libcurl4-openssl-dev libudev-dev libevdev-dev libegl1-mesa-dev libssl-dev libasound2 qt6-base-dev libqt6opengl6-dev qt6-webengine-dev qt6-webengine-dev-tools qt6-declarative-dev qml6-module-qtquick qml6-module-qtquick-layouts qml6-module-qtquick-controls qml6-module-qtquick-window qml6-module-qtquick-dialogs qml6-module-qt-labs-settings qml6-module-qt-labs-folderlistmodel qml6-module-qtwebengine libssl-dev libcurl4-openssl-dev libuv1-dev libzip-dev libprotobuf-dev protobuf-compiler qt6-base-dev libqt6opengl6-dev qt6-webengine-dev qt6-declarative-dev libqt6svg6-dev qml6-module-qtquick-layouts qml6-module-qtquick-controls qml6-module-qtquick-controls qml6-module-qtquick-dialogs qml6-module-qt-labs-settings qml6-module-qt-labs-folderlistmodel
           generator: DEB
           branch:
@@ -165,7 +168,7 @@ jobs:
             echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ lunar-updates main universe multiverse restricted" >> /etc/apt/sources.list
             echo "deb [arch=arm64,armhf] http://ports.ubuntu.com/ubuntu-ports/ lunar main universe multiverse restricted" >> /etc/apt/sources.list
             echo "deb [arch=arm64,armhf] http://ports.ubuntu.com/ubuntu-ports/ lunar-updates main universe multiverse restricted" >> /etc/apt/sources.list
-            dpkg --add-architecture arm64 && dpkg --add-architecture armhf && apt update && DEBIAN_FRONTEND=noninteractive apt install -y docker.io libfuse-dev:arm64 wget texinfo apt-transport-https vim-common qemu-user clang chrpath libstdc++-10-dev:arm64 libatomic1:arm64 wget cmake g++-arm-linux-gnueabihf g++-aarch64-linux-gnu patchelf git cmake pkg-config libssl-dev:arm64 libcurl4-openssl-dev:arm64 libpng-dev:arm64 libx11-dev:arm64 libxi-dev:arm64 libssl-dev:arm64 libudev-dev:arm64 libevdev-dev:arm64 libegl1-mesa-dev:arm64 libgl1-mesa-dev:arm64 libssl-dev:arm64 libuv1-dev:arm64 libzip-dev:arm64 libprotobuf-dev:arm64 protobuf-compiler jq curl binutils desktop-file-utils squashfs-tools libssl-dev:arm64 libpulse-dev:arm64 qt6-base-dev:arm64 libqt6opengl6-dev:arm64 qt6-webengine-dev:arm64 qt6-webengine-dev-tools:arm64 qt6-declarative-dev:arm64 qml6-module-qtquick:arm64 qml6-module-qtquick-layouts:arm64 qml6-module-qtquick-controls:arm64 qml6-module-qtquick-window:arm64 qml6-module-qtquick-dialogs:arm64 qml6-module-qt-labs-settings:arm64 qml6-module-qt-labs-folderlistmodel:arm64 qml6-module-qtwebengine:arm64 qt6-base-dev:arm64 libqt6opengl6-dev:arm64 qt6-webengine-dev:arm64 qt6-declarative-dev:arm64 libqt6svg6-dev:arm64 qml6-module-qtquick-layouts:arm64 qml6-module-qtquick-controls:arm64 qml6-module-qtquick-controls:arm64 qml6-module-qtquick-dialogs:arm64 qml6-module-qt-labs-settings:arm64 qml6-module-qt-labs-folderlistmodel:arm64 
+            dpkg --add-architecture arm64 && dpkg --add-architecture armhf && apt update && DEBIAN_FRONTEND=noninteractive apt install -y docker.io libfuse-dev:arm64 wget texinfo apt-transport-https vim-common qemu-user clang chrpath libstdc++-10-dev:arm64 libatomic1:arm64 wget cmake g++-arm-linux-gnueabihf g++-aarch64-linux-gnu patchelf git cmake pkg-config libssl-dev:arm64 libcurl4-openssl-dev:arm64 libpng-dev:arm64 libx11-dev:arm64 libxi-dev:arm64 libssl-dev:arm64 libudev-dev:arm64 libevdev-dev:arm64 libegl1-mesa-dev:arm64 libgl1-mesa-dev:arm64 libssl-dev:arm64 libuv1-dev:arm64 libzip-dev:arm64 libprotobuf-dev:arm64 protobuf-compiler jq curl binutils desktop-file-utils squashfs-tools libssl-dev:arm64 libpulse-dev:arm64 qt6-base-dev:arm64 libqt6opengl6-dev:arm64 qt6-webengine-dev:arm64 qt6-webengine-dev-tools:arm64 qt6-declarative-dev:arm64 qml6-module-qtquick:arm64 qml6-module-qtquick-layouts:arm64 qml6-module-qtquick-controls:arm64 qml6-module-qtquick-window:arm64 qml6-module-qtquick-dialogs:arm64 qml6-module-qt-labs-settings:arm64 qml6-module-qt-labs-folderlistmodel:arm64 qml6-module-qtwebengine:arm64 qt6-base-dev:arm64 libqt6opengl6-dev:arm64 qt6-webengine-dev:arm64 qt6-declarative-dev:arm64 libqt6svg6-dev:arm64 qml6-module-qtquick-layouts:arm64 qml6-module-qtquick-controls:arm64 qml6-module-qtquick-controls:arm64 qml6-module-qtquick-dialogs:arm64 qml6-module-qt-labs-settings:arm64 qml6-module-qt-labs-folderlistmodel:arm64
             docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
             echo PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig/ >> $GITHUB_PATH
             echo PATH=/usr/lib/aarch64-linux-gnu/qt6/bin/:$PATH >> $GITHUB_PATH
@@ -203,6 +206,7 @@ jobs:
           generator: RPM
         - name: fedora-38
           container: fedora:38
+          ignore-failure: true # Needs an update to fix std::runtime_error not defined
           deps: dnf install -y gcc-c++ clang cmake make git ca-certificates libstdc++ glibc-devel libpng-devel zlib-devel libX11-devel libXi-devel libcurl-devel systemd-devel libevdev-devel mesa-libEGL-devel alsa-lib pulseaudio-libs mesa-dri-drivers systemd-devel libXtst-devel openssl-devel qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel libuv-devel libzip-devel protobuf-devel protobuf-compiler qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel fedora-packager rpmdevtools
           generator: RPM
           branch:
