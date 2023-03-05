@@ -12,6 +12,13 @@ on:
         default: |-
           [
             {
+              "artifact": "bionic",
+              "distro": "bionic",
+              "component": "main",
+              "type": "apt",
+              "channel": "release"
+            },
+            {
               "artifact": "focal",
               "distro": "focal",
               "component": "main",
@@ -28,6 +35,13 @@ on:
             {
               "artifact": "kinetic",
               "distro": "kinetic",
+              "component": "main",
+              "type": "apt",
+              "channel": "release"
+            },
+            {
+              "artifact": "lunar",
+              "distro": "lunar",
               "component": "main",
               "type": "apt",
               "channel": "release"
@@ -59,6 +73,19 @@ on:
               "channel": "release"
             },
             {
+              "artifact": "fedora-38",
+              "path": "fedora-38",
+              "type": "rpm",
+              "channel": "release"
+            },
+            {
+              "artifact": "bionic-nightly",
+              "distro": "bionic-nightly",
+              "component": "main",
+              "type": "apt",
+              "channel": "nightly"
+            },
+            {
               "artifact": "focal-nightly",
               "distro": "focal-nightly",
               "component": "main",
@@ -75,6 +102,13 @@ on:
             {
               "artifact": "kinetic-nightly",
               "distro": "kinetic-nightly",
+              "component": "main",
+              "type": "apt",
+              "channel": "nightly"
+            },
+            {
+              "artifact": "lunar-nightly",
+              "distro": "lunar-nightly",
               "component": "main",
               "type": "apt",
               "channel": "nightly"
@@ -102,6 +136,12 @@ on:
             {
               "artifact": "fedora-37-nightly",
               "path": "fedora-37-nightly",
+              "type": "rpm",
+              "channel": "nightly"
+            },
+            {
+              "artifact": "fedora-38-nightly",
+              "path": "fedora-38-nightly",
               "type": "rpm",
               "channel": "nightly"
             }
