@@ -42,7 +42,7 @@ jobs:
       channel: ${{ inputs.channel }}
 
   update-version:
-    if: "!inputs.redeploy && inputs.channel == 'release'"
+    if: "!failure() && !cancelled() && !inputs.redeploy && inputs.channel == 'release'"
     runs-on: ubuntu-latest
     needs: deploy
     steps:
