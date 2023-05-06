@@ -232,7 +232,7 @@ jobs:
             CONTAINER="$(docker run --platform linux/arm64 --rm -d fedora:38 tail -f /dev/null)"
             docker exec "$CONTAINER" dnf install -y gcc-c++ clang cmake make git ca-certificates libstdc++ glibc-devel libpng-devel zlib-devel libX11-devel libXi-devel libcurl-devel systemd-devel libevdev-devel mesa-libEGL-devel alsa-lib pulseaudio-libs mesa-dri-drivers systemd-devel libXtst-devel openssl-devel qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel libuv-devel libzip-devel protobuf-devel protobuf-compiler qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel fedora-packager rpmdevtools pulseaudio-libs-devel
             mkdir fedora-sysroot
-            docker cp "$CONTAINER:/" "$PWD/fedora-sysroot/"
+            docker cp -a "$CONTAINER:/" - | tar -x -C "$PWD/fedora-sysroot/"
             sudo ln -s "$PWD/fedora-sysroot/lib/ld-linux-aarch64.so.1" /lib/ld-linux-aarch64.so.1
             sudo mkdir -p /usr/lib/rpm/
             sudo mount --bind "$PWD/fedora-sysroot/usr/lib/rpm/" /usr/lib/rpm/
