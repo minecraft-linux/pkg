@@ -228,8 +228,8 @@ jobs:
         - name: fedora-38
           container: ""
           deps: |
+            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
             CONTAINER="$(docker run --platform linux/arm64 --rm -d fedora:38 tail -f /dev/null)"
-            sleep 5
             docker exec "$CONTAINER" dnf install -y gcc-c++ clang cmake make git ca-certificates libstdc++ glibc-devel libpng-devel zlib-devel libX11-devel libXi-devel libcurl-devel systemd-devel libevdev-devel mesa-libEGL-devel alsa-lib pulseaudio-libs mesa-dri-drivers systemd-devel libXtst-devel openssl-devel qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel libuv-devel libzip-devel protobuf-devel protobuf-compiler qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel fedora-packager rpmdevtools pulseaudio-libs-devel
             mkdir fedora-sysroot
             docker cp "$CONTAINER:/" "$PWD/fedora-sysroot/"
