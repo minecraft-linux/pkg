@@ -86,7 +86,9 @@ echo "deb https://minecraft-linux.github.io/pkg/deb bookworm-nightly main" | sud
 
 ## Releases
 
-### 36 (x86_64)
+Releases before including v0.9.0 don't provide arm64, you may need to add the nightly repo to install the arm64 version.
+
+### 36 (x86_64 / arm64)
 ```
 cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << EOF
 [minecraft-linux-pkg]
@@ -102,7 +104,7 @@ gpgkey=https://minecraft-linux.github.io/pkg/deb/pubkey.gpg
 EOF
 ```
 
-### 37 (x86_64)
+### 37 (x86_64 / arm64)
 ```
 cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << EOF
 [minecraft-linux-pkg]
@@ -119,7 +121,7 @@ EOF
 ```
 ## Nightly
 
-### 36 (x86_64)
+### 36 (x86_64 / arm64)
 ```
 cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << EOF
 [minecraft-linux-pkg]
@@ -135,7 +137,7 @@ gpgkey=https://minecraft-linux.github.io/pkg/deb/pubkey.gpg
 EOF
 ```
 
-### 37 (x86_64)
+### 37 (x86_64 / arm64)
 ```
 cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << EOF
 [minecraft-linux-pkg]
