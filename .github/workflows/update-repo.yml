@@ -221,11 +221,17 @@ jobs:
               var rfile = path.relative(path.join(process.cwd(), "packages"), file);
               packages.push(rfile);
             }
+            downloadedfiles = {};
+            var currentChannel = ${{ tojson(inputs.channel) }};
             if(index.versions) {
               for(var channel in index.versions) {
                 var builds = index.versions[channel];
                 if(builds) {
-                  while(builds.length > (channelconfig[channel] || 0)) {
+                  var buildstokeep = channelconfig[channel] || 0;
+                  if(packages.length > 0 && currentChannel === channel) {
+                    buildstokeep--;
+                  }
+                  while(builds.length > buildstokeep) {
                     builds.shift();
                   }
                   for(var build of builds) {
@@ -233,6 +239,12 @@ jobs:
                       for(var f of build.buildfiles) {
                         console.log(JSON.stringify(f));
                         var fullpath = path.join("packages", f.pkgpath);
+                        if(fullpath in downloadedfiles) {
+                          console.log("skipping build artifact due to duplicated entry")
+                          continue;
+                        } else {
+                          downloadedfiles[fullpath] = f;
+                        }
                         fs.mkdirSync(path.dirname(fullpath), {recursive: true});
                         await exec.exec("curl", ["-L", `${rootUrl}/${f.path}`, "--output", fullpath]);
                       }
@@ -362,8 +374,10 @@ jobs:
             for await (const file of globber.globGenerator()) {
               var rfile = path.relative(path.join(process.cwd(), "webpage"), file);
               allfiles.push(rfile);
-              var pkgpath = buildmap[path.basename(file)];
+              var filebasename = path.basename(file);
+              var pkgpath = buildmap[filebasename];
               if(pkgpath) {
+                delete buildmap[filebasename];
                 buildfiles.push({ pkgpath, path: rfile });
               }
             }
