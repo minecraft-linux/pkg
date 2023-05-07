@@ -193,6 +193,19 @@ jobs:
           container: buildpack-deps:bullseye
           deps: apt-get update && apt-get install -y --no-install-recommends g++ clang cmake make git ca-certificates libssl-dev libpng-dev libx11-dev libxi-dev libcurl4-openssl-dev libudev-dev libevdev-dev libegl1-mesa-dev libssl-dev libasound2 qtbase5-dev qtwebengine5-dev qtdeclarative5-dev libqt5svg5-dev qml-module-qtquick2 qml-module-qtquick-layouts qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtquick-dialogs qml-module-qt-labs-settings qml-module-qt-labs-folderlistmodel qml-module-qtwebengine libssl-dev libcurl4-openssl-dev libuv1-dev libzip-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtwebengine5-dev qtdeclarative5-dev libqt5svg5-dev qml-module-qtquick2 qml-module-qtquick-layouts qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtquick-dialogs qml-module-qt-labs-settings qml-module-qt-labs-folderlistmodel
           generator: DEB
+        - name: bullseye
+          container: buildpack-deps:bullseye
+          deps: |
+            dpkg --add-architecture arm64 && dpkg --add-architecture armhf && apt update && DEBIAN_FRONTEND=noninteractive apt install -y docker.io libfuse-dev:arm64 wget texinfo apt-transport-https vim-common qemu-user clang chrpath libstdc++-10-dev:arm64 libatomic1:arm64 wget cmake g++-arm-linux-gnueabihf g++-aarch64-linux-gnu patchelf git cmake pkg-config qtbase5-dev:arm64 qtwebengine5-dev:arm64 libssl-dev:arm64 libcurl4-openssl-dev:arm64 libpng-dev:arm64 libx11-dev:arm64 libxi-dev:arm64 libssl-dev:arm64 libudev-dev:arm64 libevdev-dev:arm64 libegl1-mesa-dev:arm64 libgl1-mesa-dev:arm64 libssl-dev:arm64 libuv1-dev:arm64 libzip-dev:arm64 libprotobuf-dev:arm64 protobuf-compiler qtdeclarative5-dev:arm64 libqt5svg5-dev:arm64 qml-module-qtwebengine:arm64 qml-module-qtquick2:arm64 qml-module-qtquick-layouts:arm64 qml-module-qtquick-controls:arm64 qml-module-qtquick-controls2:arm64 qml-module-qtquick-window2:arm64 qml-module-qtquick-dialogs:arm64 qml-module-qt-labs-settings:arm64 qml-module-qt-labs-folderlistmodel:arm64 jq curl binutils desktop-file-utils squashfs-tools qtdeclarative5-dev-tools:arm64 libssl-dev:arm64 libpulse-dev:arm64
+            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+            echo "PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig/" >> $GITHUB_ENV
+            echo "/usr/lib/aarch64-linux-gnu/qt5/bin/" >> $GITHUB_PATH
+            curl -L -O https://raw.githubusercontent.com/ChristopherHX/linux-packaging-scripts/main/arm64toolchain.txt
+          generator: DEB
+          cmakeflags:
+            mcpelauncher-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
+            mcpelauncher-ui-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
+            msa-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
         - name: bookworm
           container: buildpack-deps:bookworm
           deps: apt-get update && apt-get install -y --no-install-recommends g++ clang cmake make git ca-certificates libssl-dev libpng-dev libx11-dev libxi-dev libcurl4-openssl-dev libudev-dev libevdev-dev libegl1-mesa-dev libssl-dev libasound2 qt6-base-dev libqt6opengl6-dev qt6-webengine-dev qt6-declarative-dev qml6-module-qtquick qml6-module-qtquick-layouts qml6-module-qtquick-controls qml6-module-qtquick-window qml6-module-qtquick-dialogs qml6-module-qt-labs-settings qml6-module-qt-labs-folderlistmodel qml6-module-qtwebengine libssl-dev libcurl4-openssl-dev libuv1-dev libzip-dev libprotobuf-dev protobuf-compiler qt6-base-dev libqt6opengl6-dev qt6-webengine-dev qt6-declarative-dev libqt6svg6-dev qml6-module-qtquick-layouts qml6-module-qtquick-controls qml6-module-qtquick-controls qml6-module-qtquick-dialogs qml6-module-qt-labs-settings qml6-module-qt-labs-folderlistmodel
@@ -202,6 +215,26 @@ jobs:
             mcpelauncher-ui-manifest: qt6
           cmakeflags:
             msa-manifest: -DQT_VERSION=6
+          pkg-deps: libc6, ca-certificates, qml6-module-qtquick, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-window, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, qml6-module-qtwebengine, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, libqt6svg6, libqt6concurrent6, libqt6webenginewidgets6, libzip4, qml6-module-qtqml-workerscript, qml6-module-qt-labs-platform, qml6-module-qtquick-templates
+        - name: bookworm
+          container: buildpack-deps:bookworm
+          deps: |
+            dpkg --add-architecture arm64 && dpkg --add-architecture armhf && apt update && apt-mark hold linux-libc-dev:amd64 && DEBIAN_FRONTEND=noninteractive apt install -y docker.io libfuse-dev:arm64 wget texinfo apt-transport-https vim-common qemu-user chrpath libstdc++-11-dev:arm64 libatomic1:arm64 wget cmake g++-arm-linux-gnueabihf g++-aarch64-linux-gnu patchelf git cmake pkg-config libssl-dev:arm64 libcurl4-openssl-dev:arm64 libpng-dev:arm64 libx11-dev:arm64 libxi-dev:arm64 libssl-dev:arm64 libudev-dev:arm64 libevdev-dev:arm64 libegl1-mesa-dev:arm64 libgl1-mesa-dev:arm64 libssl-dev:arm64 libuv1-dev:arm64 libzip-dev:arm64 libprotobuf-dev:arm64 protobuf-compiler jq curl binutils desktop-file-utils squashfs-tools libssl-dev:arm64 libpulse-dev:arm64 qt6-base-dev:arm64 libqt6opengl6-dev:arm64 qt6-webengine-dev:arm64 qt6-webengine-dev-tools:arm64 qt6-declarative-dev:arm64 qml6-module-qtquick:arm64 qml6-module-qtquick-layouts:arm64 qml6-module-qtquick-controls:arm64 qml6-module-qtquick-window:arm64 qml6-module-qtquick-dialogs:arm64 qml6-module-qt-labs-settings:arm64 qml6-module-qt-labs-folderlistmodel:arm64 qml6-module-qtwebengine:arm64 qt6-base-dev:arm64 libqt6opengl6-dev:arm64 qt6-webengine-dev:arm64 qt6-declarative-dev:arm64 libqt6svg6-dev:arm64 qml6-module-qtquick-layouts:arm64 qml6-module-qtquick-controls:arm64 qml6-module-qtquick-controls:arm64 qml6-module-qtquick-dialogs:arm64 qml6-module-qt-labs-settings:arm64 qml6-module-qt-labs-folderlistmodel:arm64
+            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+            echo "PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig/" >> $GITHUB_ENV
+            echo PATH=/usr/lib/aarch64-linux-gnu/qt6/bin/:$PATH >> $GITHUB_PATH
+            curl -L -O https://raw.githubusercontent.com/ChristopherHX/linux-packaging-scripts/main/arm64toolchain.txt
+            curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.6/clang+llvm-15.0.6-x86_64-linux-gnu-ubuntu-18.04.tar.xz --output llvm.tar.xz
+            tar --no-same-owner -xf llvm.tar.xz
+            echo "$PWD/clang+llvm-15.0.6-x86_64-linux-gnu-ubuntu-18.04/bin" >> $GITHUB_PATH
+          generator: DEB
+          branch:
+            mcpelauncher-manifest: qt6
+            mcpelauncher-ui-manifest: qt6
+          cmakeflags:
+            mcpelauncher-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
+            mcpelauncher-ui-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
+            msa-manifest: -DQT_VERSION=6 -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
           pkg-deps: libc6, ca-certificates, qml6-module-qtquick, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-window, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, qml6-module-qtwebengine, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, libqt6svg6, libqt6concurrent6, libqt6webenginewidgets6, libzip4, qml6-module-qtqml-workerscript, qml6-module-qt-labs-platform, qml6-module-qtquick-templates
         - name: fedora-36
           container: fedora:36

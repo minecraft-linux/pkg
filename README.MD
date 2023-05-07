@@ -10,6 +10,8 @@ curl -sS https://minecraft-linux.github.io/pkg/deb/pubkey.gpg | sudo tee -a /etc
 
 ## Releases
 
+Releases before including v0.9.0 don't provide arm64 for debian, you may need to add the nightly repo to install the arm64 version.
+
 ### bionic (arm64)
 ```
 echo "deb https://minecraft-linux.github.io/pkg/deb bionic main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
@@ -30,17 +32,17 @@ echo "deb https://minecraft-linux.github.io/pkg/deb jammy main" | sudo tee /etc/
 echo "deb https://minecraft-linux.github.io/pkg/deb kinetic main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
-### lunar (x86_64)
+### lunar (x86_64 / arm64)
 ```
 echo "deb https://minecraft-linux.github.io/pkg/deb lunar main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
-### bullseye (x86_64)
+### bullseye (x86_64 / arm64)
 ```
 echo "deb https://minecraft-linux.github.io/pkg/deb bullseye main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
-### bookworm (x86_64)
+### bookworm (x86_64 / arm64)
 ```
 echo "deb https://minecraft-linux.github.io/pkg/deb bookworm main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
@@ -67,17 +69,17 @@ echo "deb https://minecraft-linux.github.io/pkg/deb jammy-nightly main" | sudo t
 echo "deb https://minecraft-linux.github.io/pkg/deb kinetic-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
-### lunar (x86_64)
+### lunar (x86_64 / arm64)
 ```
 echo "deb https://minecraft-linux.github.io/pkg/deb lunar-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
-### bullseye (x86_64)
+### bullseye (x86_64 / arm64)
 ```
 echo "deb https://minecraft-linux.github.io/pkg/deb bullseye-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
-### bookworm (x86_64)
+### bookworm (x86_64 / arm64)
 ```
 echo "deb https://minecraft-linux.github.io/pkg/deb bookworm-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
