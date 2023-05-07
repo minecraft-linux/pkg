@@ -288,6 +288,7 @@ jobs:
           cmakeflags:
             msa-manifest: -DQT_VERSION=6
             mcpelauncher-manifest: -DCURL_EXT_EXTRA_OPTIONS="-DCMAKE_INSTALL_LIBDIR=lib"
+          pkg-deps: " " # qt5-qtquickcontrols is part of qt6-declarative, which is automatically detected as dependency by cpack
         - name: fedora-37
           container: ""
           deps: |
@@ -324,6 +325,7 @@ jobs:
             msa-manifest: -DQT_VERSION=6 -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
             mcpelauncher-manifest: -DCURL_EXT_EXTRA_OPTIONS="-DCMAKE_INSTALL_LIBDIR=lib" -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
             mcpelauncher-ui-manifest: -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
+          pkg-deps: " " # qt5-qtquickcontrols is part of qt6-declarative, which is automatically detected as dependency by cpack
         - name: fedora-38
           container: fedora:38
           deps: dnf install -y gcc-c++ clang cmake make git ca-certificates libstdc++ glibc-devel libpng-devel zlib-devel libX11-devel libXi-devel libcurl-devel systemd-devel libevdev-devel mesa-libEGL-devel alsa-lib pulseaudio-libs mesa-dri-drivers systemd-devel libXtst-devel openssl-devel qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel libuv-devel libzip-devel protobuf-devel protobuf-compiler qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel fedora-packager rpmdevtools
@@ -334,6 +336,7 @@ jobs:
           cmakeflags:
             msa-manifest: -DQT_VERSION=6
             mcpelauncher-manifest: -DCURL_EXT_EXTRA_OPTIONS="-DCMAKE_INSTALL_LIBDIR=lib"
+          pkg-deps: " " # qt5-qtquickcontrols is part of qt6-declarative, which is automatically detected as dependency by cpack
         - name: fedora-38
           container: ""
           deps: |
@@ -370,6 +373,7 @@ jobs:
             msa-manifest: -DQT_VERSION=6 -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
             mcpelauncher-manifest: -DCURL_EXT_EXTRA_OPTIONS="-DCMAKE_INSTALL_LIBDIR=lib" -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
             mcpelauncher-ui-manifest: -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
+          pkg-deps: " " # qt5-qtquickcontrols is part of qt6-declarative, which is automatically detected as dependency by cpack
         include:
         - cmakeflags:
             mcpelauncher-manifest: -DENABLE_DEV_PATHS=OFF
