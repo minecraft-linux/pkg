@@ -229,8 +229,11 @@ jobs:
           container: ""
           deps: |
             docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+            CONTAINER="$(docker run --platform linux/arm64 --rm -d fedora:38 tail -f /dev/null)"
             mkdir fedora-sysroot
-            docker run --rm -v $PWD/fedora-sysroot:/fedora-sysroot fedora:38 dnf --installroot=/fedora-sysroot/ --forcearch=aarch64 --releasever=38 -y install gcc-c++ clang cmake make git ca-certificates libstdc++ glibc-devel libpng-devel zlib-devel libX11-devel libXi-devel libcurl-devel systemd-devel libevdev-devel mesa-libEGL-devel alsa-lib pulseaudio-libs mesa-dri-drivers systemd-devel libXtst-devel openssl-devel qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel libuv-devel libzip-devel protobuf-devel protobuf-compiler qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel fedora-packager rpmdevtools pulseaudio-libs-devel
+            docker cp -a "$CONTAINER:/" - | tar -x -C "$PWD/fedora-sysroot/"
+            docker stop "$CONTAINER"
+            docker run --rm -v $PWD/fedora-sysroot:/fedora-sysroot --platform linux/x86_64 fedora:38 dnf --installroot=/fedora-sysroot/ --forcearch=aarch64 --releasever=38 -y install gcc-c++ clang cmake make git ca-certificates libstdc++ glibc-devel libpng-devel zlib-devel libX11-devel libXi-devel libcurl-devel systemd-devel libevdev-devel mesa-libEGL-devel alsa-lib pulseaudio-libs mesa-dri-drivers systemd-devel libXtst-devel openssl-devel qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel libuv-devel libzip-devel protobuf-devel protobuf-compiler qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel fedora-packager rpmdevtools pulseaudio-libs-devel
             sudo ln -s "$PWD/fedora-sysroot/lib/ld-linux-aarch64.so.1" /lib/ld-linux-aarch64.so.1
             sudo mkdir -p /usr/lib/rpm/
             sudo mount --bind "$PWD/fedora-sysroot/usr/lib/rpm/" /usr/lib/rpm/
