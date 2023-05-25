@@ -1,5 +1,7 @@
 on:
   workflow_dispatch:
+  push:
+    branches: verify-fedora
 jobs:
   verify:
     strategy:
