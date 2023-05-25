@@ -16,6 +16,7 @@ jobs:
         exclude:
         - distro: bionic
           arch: arm64
+    run-on: ubuntu-latest
     steps:
     - run: |
         docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
