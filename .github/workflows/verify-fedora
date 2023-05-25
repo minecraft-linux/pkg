@@ -1,0 +1,33 @@
+on:
+  workflow_dispatch:
+jobs:
+  verify:
+    strategy:
+      matrix:
+        distro:
+        - 36
+        - 37
+        - 38
+        arch:
+        - amd64
+        - arm64
+    steps:
+    - run: |
+        docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+        cat > script.sh << 'EOS'
+        cat | tee /etc/yum.repos.d/minecraft-linux-pkg.repo << 'EOF'
+        [minecraft-linux-pkg]
+        name=minecraft-linux-pkg
+        baseurl=https://minecraft-linux.github.io/pkg/fedora-${{ matrix.distro }}
+        enabled=1
+        countme=1
+        repo_gpgcheck=0
+        type=rpm
+        gpgcheck=1
+        skip_if_unavailable=False
+        gpgkey=https://minecraft-linux.github.io/pkg/deb/pubkey.gpg
+        EOF
+        dnf install -y mcpelauncher-manifest mcpelauncher-ui-manifest msa-manifest
+        ldd $(which mcpelauncher-ui-qt) && ldd $(which mcpelauncher-client) && ldd $(which mcpelauncher-webview) && ldd $(which msa-ui-qt) && ldd $(which msa-daemon)
+        EOS
+        docker run --rm fedora:${{ matrix.distro }} --platform linux/${{ matrix.arch }} -v "$PWD/script.sh:/script.sh" -- bash /script.sh
