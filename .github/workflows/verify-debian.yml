@@ -1,0 +1,16 @@
+on:
+  workflow_dispatch:
+jobs:
+  verify:
+    strategy:
+      matrix:
+        distro:
+        - bullseye
+        - bookworm
+        arch:
+        - amd64
+        - arm64
+    steps:
+    - run: |
+        docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+        docker run --rm ubuntu:${{ matrix.distro }} --platform linux/${{ matrix.arch }} -- apt update && apt install sudo curl && curl -sS https://minecraft-linux.github.io/pkg/deb/pubkey.gpg | sudo tee -a /etc/apt/trusted.gpg.d/minecraft-linux-pkg.asc && echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb bookworm-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list && apt update && apt install mcpelauncher-manifest mcpelauncher-ui-manifest msa-manifest && ldd \$(which mcpelauncher-ui-qt) && ldd \$(which mcpelauncher-client) && ldd \$(which mcpelauncher-webview)

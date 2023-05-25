@@ -14,74 +14,74 @@ Releases before including v0.9.0 don't provide arm64 for debian, you may need to
 
 ### bionic (arm64)
 ```
-echo "deb https://minecraft-linux.github.io/pkg/deb bionic main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
+echo "deb [arch=arm64] https://minecraft-linux.github.io/pkg/deb bionic main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
 ### focal (x86_64 / arm64)
 ```
-echo "deb https://minecraft-linux.github.io/pkg/deb focal main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
+echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb focal main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
 ### jammy (x86_64 / arm64)
 ```
-echo "deb https://minecraft-linux.github.io/pkg/deb jammy main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
+echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb jammy main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
 ### kinetic (x86_64 / arm64)
 ```
-echo "deb https://minecraft-linux.github.io/pkg/deb kinetic main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
+echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb kinetic main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
 ### lunar (x86_64 / arm64)
 ```
-echo "deb https://minecraft-linux.github.io/pkg/deb lunar main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
+echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb lunar main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
 ### bullseye (x86_64 / arm64)
 ```
-echo "deb https://minecraft-linux.github.io/pkg/deb bullseye main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
+echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb bullseye main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
 ### bookworm (x86_64 / arm64)
 ```
-echo "deb https://minecraft-linux.github.io/pkg/deb bookworm main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
+echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb bookworm main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
 ## Nightly
 
 ### bionic (arm64)
 ```
-echo "deb https://minecraft-linux.github.io/pkg/deb bionic-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
+echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb bionic-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
 ### focal (x86_64 / arm64)
 ```
-echo "deb https://minecraft-linux.github.io/pkg/deb focal-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
+echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb focal-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
 ### jammy (x86_64 / arm64)
 ```
-echo "deb https://minecraft-linux.github.io/pkg/deb jammy-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
+echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb jammy-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
 ### kinetic (x86_64 / arm64)
 ```
-echo "deb https://minecraft-linux.github.io/pkg/deb kinetic-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
+echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb kinetic-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
 ### lunar (x86_64 / arm64)
 ```
-echo "deb https://minecraft-linux.github.io/pkg/deb lunar-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
+echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb lunar-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
 ### bullseye (x86_64 / arm64)
 ```
-echo "deb https://minecraft-linux.github.io/pkg/deb bullseye-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
+echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb bullseye-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
 ### bookworm (x86_64 / arm64)
 ```
-echo "deb https://minecraft-linux.github.io/pkg/deb bookworm-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
+echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb bookworm-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
 # Fedora rpm repos
@@ -92,7 +92,7 @@ Releases before including v0.9.0 don't provide arm64, you may need to add the ni
 
 ### 36 (x86_64 / arm64)
 ```
-cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << EOF
+cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << 'EOF'
 [minecraft-linux-pkg]
 name=minecraft-linux-pkg
 baseurl=https://minecraft-linux.github.io/pkg/fedora-36
@@ -108,10 +108,26 @@ EOF
 
 ### 37 (x86_64 / arm64)
 ```
-cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << EOF
+cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << 'EOF'
 [minecraft-linux-pkg]
 name=minecraft-linux-pkg
 baseurl=https://minecraft-linux.github.io/pkg/fedora-37
+enabled=1
+countme=1
+repo_gpgcheck=0
+type=rpm
+gpgcheck=1
+skip_if_unavailable=False
+gpgkey=https://minecraft-linux.github.io/pkg/deb/pubkey.gpg
+EOF
+```
+
+### 38 (x86_64 / arm64)
+```
+cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << 'EOF'
+[minecraft-linux-pkg]
+name=minecraft-linux-pkg
+baseurl=https://minecraft-linux.github.io/pkg/fedora-38
 enabled=1
 countme=1
 repo_gpgcheck=0
@@ -125,7 +141,7 @@ EOF
 
 ### 36 (x86_64 / arm64)
 ```
-cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << EOF
+cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << 'EOF'
 [minecraft-linux-pkg]
 name=minecraft-linux-pkg
 baseurl=https://minecraft-linux.github.io/pkg/fedora-36-nightly
@@ -141,10 +157,26 @@ EOF
 
 ### 37 (x86_64 / arm64)
 ```
-cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << EOF
+cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << 'EOF'
 [minecraft-linux-pkg]
 name=minecraft-linux-pkg
 baseurl=https://minecraft-linux.github.io/pkg/fedora-37-nightly
+enabled=1
+countme=1
+repo_gpgcheck=0
+type=rpm
+gpgcheck=1
+skip_if_unavailable=False
+gpgkey=https://minecraft-linux.github.io/pkg/deb/pubkey.gpg
+EOF
+```
+
+### 38 (x86_64 / arm64)
+```
+cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << 'EOF'
+[minecraft-linux-pkg]
+name=minecraft-linux-pkg
+baseurl=https://minecraft-linux.github.io/pkg/fedora-38-nightly
 enabled=1
 countme=1
 repo_gpgcheck=0
