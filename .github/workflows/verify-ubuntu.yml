@@ -15,7 +15,7 @@ jobs:
         - arm64
         exclude:
         - distro: bionic
-          arch: arm64
+          arch: amd64
     runs-on: ubuntu-latest
     steps:
     - run: |
