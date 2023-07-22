@@ -15,6 +15,9 @@ on:
       versionsdbremote:
         type: string
         default: master
+      shas:
+        type: string
+        default: "{}"
 jobs:
   build-linux:
     runs-on: ubuntu-latest
@@ -388,8 +391,19 @@ jobs:
       shell: bash
     - name: Get Sources
       run: |
-        git clone --recursive https://github.com/minecraft-linux/${{ matrix.repo }} mcpelauncher ${{ matrix.platform.branch[matrix.repo] && format('-b {0}', matrix.platform.branch[matrix.repo]) }}
+        if [[ "$SHA" = "" ]]
+        then
+          git clone --recursive https://github.com/minecraft-linux/${{ matrix.repo }} mcpelauncher ${{ matrix.platform.branch[matrix.repo] && format('-b {0}', matrix.platform.branch[matrix.repo]) }}
+        else
+          mkdir mcpelauncher
+          git -C mcpelauncher init
+          git -C mcpelauncher fetch https://github.com/minecraft-linux/${{ matrix.repo }} "$SHA"
+          git -C mcpelauncher reset --hard FETCH_HEAD
+          git -C mcpelauncher submodule update --init --recursive
+        fi
         mv mcpelauncher/CMakeLists.txt mcpelauncher/CMakeLists.org.txt
+      env:
+        SHA: ${{ fromjson(inputs.shas)[matrix.platform.branch[matrix.repo]] }}
     - name: Create CMakeLists.txt
       run: |
         cmake_minimum_required(VERSION 3.0)
