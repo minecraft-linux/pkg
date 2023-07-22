@@ -397,7 +397,8 @@ jobs:
         else
           mkdir mcpelauncher
           git -C mcpelauncher init
-          git -C mcpelauncher fetch https://github.com/minecraft-linux/${{ matrix.repo }} "$SHA"
+          git -C mcpelauncher remote add origin https://github.com/minecraft-linux/${{ matrix.repo }}
+          git -C mcpelauncher fetch origin "$SHA"
           git -C mcpelauncher reset --hard FETCH_HEAD
           git -C mcpelauncher submodule update --init --recursive
         fi
