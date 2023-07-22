@@ -404,7 +404,7 @@ jobs:
         fi
         mv mcpelauncher/CMakeLists.txt mcpelauncher/CMakeLists.org.txt
       env:
-        SHA: ${{ fromjson(inputs.shas)[matrix.platform.branch[matrix.repo]] }}
+        SHA: ${{ fromjson(inputs.shas)[matrix.repo][matrix.platform.branch[matrix.repo]] }}
     - name: Create CMakeLists.txt
       run: |
         cmake_minimum_required(VERSION 3.0)
