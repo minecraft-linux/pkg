@@ -427,7 +427,7 @@ jobs:
 
         set(CPACK_GENERATOR "TGZ;${{ matrix.platform.generator }}")
         set(CPACK_PACKAGE_CONTACT "https://github.com/minecraft-linux/${{ matrix.repo }}/issues")
-        set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${{ inputs.version }}.${{ github.run_id }}.${{ github.run_attempt }}~${{ matrix.platform.name }}")
+        set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${{ inputs.version }}.${{ github.run_id }}.${{ github.run_attempt }}~${{ matrix.platform.name }}")
         set(CPACK_DEBIAN_PACKAGE_DEPENDS "${{ matrix.platform.pkg-deps || 'libc6, ca-certificates, libxcursor1, libxinerama1, libxi6, libxrandr2, qml-module-qtquick2, qml-module-qtquick-layouts, qml-module-qtquick-controls, qml-module-qtquick-controls2, qml-module-qtquick-window2, qml-module-qtquick-dialogs, qml-module-qt-labs-settings, qml-module-qt-labs-folderlistmodel, qml-module-qtwebengine, libqt5svg5, libqt5concurrent5, libqt5webenginewidgets5, libzip4, qml-module-qtquick-templates2, libprotobuf23' }}")
         set(CPACK_DEBIAN_PACKAGE_VERSION "${{ inputs.version }}.${{ github.run_id }}.${{ github.run_attempt }}~${{ matrix.platform.name }}")
         set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
