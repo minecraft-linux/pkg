@@ -1,3 +1,7 @@
+# mcpelauncher package repository
+
+Please read https://mcpelauncher.readthedocs.io for available packages.
+
 # Debian and Ubuntu apt repos
 
 ## trust the apt repo to install packages
@@ -12,6 +16,7 @@ curl -sS https://minecraft-linux.github.io/pkg/deb/pubkey.gpg | sudo tee -a /etc
 
 Releases before including v0.9.0 don't provide arm64 for debian, you may need to add the nightly repo to install the arm64 version.
 Releases before including v0.11.4 don't provide armhf for debian, you may need to add the nightly repo to install the armhf version.
+Releases before including v0.11.4 don't provide fedora 39 packages, you may need to add the nightly repo to install the fedora 39 version.
 
 ### bionic (arm64)
 ```
@@ -90,8 +95,9 @@ echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb bookworm-
 ## Releases
 
 Releases before including v0.9.0 don't provide arm64, you may need to add the nightly repo to install the arm64 version.
+Releases before including v0.11.4 don't provide fedora 39 packages, you may need to add the nightly repo to install the fedora 39 version.
 
-### 36 (x86_64 / arm64)
+### 36 (x86_64 / arm64) (**Deprecated** v0.11.4 is the last version)
 ```
 cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << 'EOF'
 [minecraft-linux-pkg]
@@ -138,14 +144,13 @@ skip_if_unavailable=False
 gpgkey=https://minecraft-linux.github.io/pkg/deb/pubkey.gpg
 EOF
 ```
-## Nightly
 
-### 36 (x86_64 / arm64)
+### 39 (x86_64 / arm64)
 ```
 cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << 'EOF'
 [minecraft-linux-pkg]
 name=minecraft-linux-pkg
-baseurl=https://minecraft-linux.github.io/pkg/fedora-36-nightly
+baseurl=https://minecraft-linux.github.io/pkg/fedora-39
 enabled=1
 countme=1
 repo_gpgcheck=0
@@ -155,6 +160,7 @@ skip_if_unavailable=False
 gpgkey=https://minecraft-linux.github.io/pkg/deb/pubkey.gpg
 EOF
 ```
+## Nightly
 
 ### 37 (x86_64 / arm64)
 ```
@@ -178,6 +184,22 @@ cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << 'EOF'
 [minecraft-linux-pkg]
 name=minecraft-linux-pkg
 baseurl=https://minecraft-linux.github.io/pkg/fedora-38-nightly
+enabled=1
+countme=1
+repo_gpgcheck=0
+type=rpm
+gpgcheck=1
+skip_if_unavailable=False
+gpgkey=https://minecraft-linux.github.io/pkg/deb/pubkey.gpg
+EOF
+```
+
+### 39 (x86_64 / arm64)
+```
+cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << 'EOF'
+[minecraft-linux-pkg]
+name=minecraft-linux-pkg
+baseurl=https://minecraft-linux.github.io/pkg/fedora-39-nightly
 enabled=1
 countme=1
 repo_gpgcheck=0

@@ -348,21 +348,26 @@ jobs:
             msa-manifest: -DQT_VERSION=6
             mcpelauncher-manifest: -DCURL_EXT_EXTRA_OPTIONS="-DCMAKE_INSTALL_LIBDIR=lib"
         - name: fedora-39
-          container: ""
+          container:
+            image: fedora:39
+            options: --privileged --cap-add=SYS_ADMIN
           deps: |
+            dnf install dnf-plugins-core
+            dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+            dnf install docker-ce-cli
             docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
             CONTAINER="$(docker run --platform linux/arm64 --rm -d fedora:39 tail -f /dev/null)"
             mkdir fedora-sysroot
             docker cp -a "$CONTAINER:/" - | tar -x -C "$PWD/fedora-sysroot/"
             docker stop "$CONTAINER"
-            docker run --rm -v $PWD/fedora-sysroot:/fedora-sysroot --platform linux/x86_64 fedora:39 dnf --installroot=/fedora-sysroot/ --forcearch=aarch64 --releasever=39 -y install gcc-c++ clang cmake make git ca-certificates libstdc++ glibc-devel libpng-devel zlib-devel libX11-devel libXcursor-devel libXi-devel libXinerama-devel libXrandr-devel libcurl-devel systemd-devel libevdev-devel mesa-libEGL-devel alsa-lib pulseaudio-libs mesa-dri-drivers systemd-devel libXtst-devel openssl-devel qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel libuv-devel libzip-devel protobuf-devel protobuf-compiler qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel fedora-packager rpmdevtools pulseaudio-libs-devel
-            sudo ln -s "$PWD/fedora-sysroot/lib/ld-linux-aarch64.so.1" /lib/ld-linux-aarch64.so.1
-            sudo mkdir -p /usr/lib/rpm/
-            sudo mount --bind "$PWD/fedora-sysroot/usr/lib/rpm/" /usr/lib/rpm/
-            sudo mkdir -p /var/lib/rpm/
-            sudo mount --bind "$PWD/fedora-sysroot/var/lib/rpm/" /var/lib/rpm/
-            sudo mkdir -p /usr/lib/sysimage/rpm/
-            sudo mount --bind "$PWD/fedora-sysroot/usr/lib/sysimage/rpm/" /usr/lib/sysimage/rpm/
+            dnf --installroot="$PWD/fedora-sysroot/" --forcearch=aarch64 --releasever=39 -y install gcc-c++ clang cmake make git ca-certificates libstdc++ glibc-devel libpng-devel zlib-devel libX11-devel libXcursor-devel libXi-devel libXinerama-devel libXrandr-devel libcurl-devel systemd-devel libevdev-devel mesa-libEGL-devel alsa-lib pulseaudio-libs mesa-dri-drivers systemd-devel libXtst-devel openssl-devel qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel libuv-devel libzip-devel protobuf-devel protobuf-compiler qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel fedora-packager rpmdevtools pulseaudio-libs-devel
+            ln -s "$PWD/fedora-sysroot/lib/ld-linux-aarch64.so.1" /lib/ld-linux-aarch64.so.1
+            mkdir -p /usr/lib/rpm/
+            mount --bind "$PWD/fedora-sysroot/usr/lib/rpm/" /usr/lib/rpm/
+            mkdir -p /var/lib/rpm/
+            mount --bind "$PWD/fedora-sysroot/var/lib/rpm/" /var/lib/rpm/
+            mkdir -p /usr/lib/sysimage/rpm/
+            mount --bind "$PWD/fedora-sysroot/usr/lib/sysimage/rpm/" /usr/lib/sysimage/rpm/
             echo "PATH=$PATH:$PWD/fedora-sysroot/bin" >> $GITHUB_ENV
             echo "LD_LIBRARY_PATH=$PWD/fedora-sysroot/lib64" >> $GITHUB_ENV
             cat > toolchain.txt << EOF
