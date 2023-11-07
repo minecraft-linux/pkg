@@ -79,6 +79,12 @@ on:
               "channel": "release"
             },
             {
+              "artifact": "fedora-39",
+              "path": "fedora-39",
+              "type": "rpm",
+              "channel": "release"
+            },
+            {
               "artifact": "bionic-nightly",
               "distro": "bionic-nightly",
               "component": "main",
@@ -142,6 +148,12 @@ on:
             {
               "artifact": "fedora-38-nightly",
               "path": "fedora-38-nightly",
+              "type": "rpm",
+              "channel": "nightly"
+            },
+            {
+              "artifact": "fedora-39-nightly",
+              "path": "fedora-39-nightly",
               "type": "rpm",
               "channel": "nightly"
             }

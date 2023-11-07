@@ -181,6 +181,20 @@ jobs:
             mcpelauncher-ui-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
             msa-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
           pkg-deps: libc6, ca-certificates, libxcursor1, libxinerama1, libxi6, libxrandr2, qml-module-qtquick2, qml-module-qtquick-layouts, qml-module-qtquick-controls, qml-module-qtquick-controls2, qml-module-qtquick-window2, qml-module-qtquick-dialogs, qml-module-qt-labs-settings, qml-module-qt-labs-folderlistmodel, qml-module-qtwebengine, libqt5svg5, libqt5concurrent5, libqt5webenginewidgets5, libzip4, qml-module-qtquick-templates2, libprotobuf23, libpulse0, libatomic1
+        - name: bullseye
+          container: debian:bullseye
+          deps: |
+            dpkg --add-architecture armhf && dpkg --add-architecture armhf && apt update && DEBIAN_FRONTEND=noninteractive apt install -y docker.io libfuse-dev:armhf wget texinfo apt-transport-https vim-common qemu-user clang chrpath libstdc++-10-dev:armhf libatomic1:armhf wget cmake g++-arm-linux-gnueabihf g++-arm-linux-gnueabihf patchelf git cmake pkg-config qtbase5-dev:armhf qtwebengine5-dev:armhf libssl-dev:armhf libcurl4-openssl-dev:armhf libpng-dev:armhf libx11-dev:armhf libxcursor-dev:armhf libxinerama-dev:armhf libxi-dev:armhf libxrandr-dev:armhf libssl-dev:armhf libudev-dev:armhf libevdev-dev:armhf libegl1-mesa-dev:armhf libgl1-mesa-dev:armhf libssl-dev:armhf libuv1-dev:armhf libzip-dev:armhf libprotobuf-dev:armhf protobuf-compiler qtdeclarative5-dev:armhf libqt5svg5-dev:armhf qml-module-qtwebengine:armhf qml-module-qtquick2:armhf qml-module-qtquick-layouts:armhf qml-module-qtquick-controls:armhf qml-module-qtquick-controls2:armhf qml-module-qtquick-window2:armhf qml-module-qtquick-dialogs:armhf qml-module-qt-labs-settings:armhf qml-module-qt-labs-folderlistmodel:armhf jq curl binutils desktop-file-utils squashfs-tools qtdeclarative5-dev-tools:armhf libssl-dev:armhf libpulse-dev:armhf
+            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+            echo "PKG_CONFIG_PATH=/usr/lib/arm-linux-gnueabihf/pkgconfig/" >> $GITHUB_ENV
+            echo "/usr/lib/arm-linux-gnueabihf/qt5/bin/" >> $GITHUB_PATH
+            curl -L -O https://raw.githubusercontent.com/ChristopherHX/linux-packaging-scripts/main/armhftoolchain.txt
+          generator: DEB
+          cmakeflags:
+            mcpelauncher-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=arm-linux-gnueabihf -march=armv7 -mfpu=neon" -DCMAKE_C_FLAGS="-latomic --target=arm-linux-gnueabihf -march=armv7 -mfpu=neon" -DCMAKE_CXX_FLAGS="-latomic --target=arm-linux-gnueabihf -march=armv7 -mfpu=neon" -DCMAKE_TOOLCHAIN_FILE=$PWD/armhftoolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=armhf
+            mcpelauncher-ui-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=arm-linux-gnueabihf -march=armv7 -mfpu=neon" -DCMAKE_C_FLAGS="-latomic --target=arm-linux-gnueabihf -march=armv7 -mfpu=neon" -DCMAKE_CXX_FLAGS="-latomic --target=arm-linux-gnueabihf -march=armv7 -mfpu=neon" -DCMAKE_TOOLCHAIN_FILE=$PWD/armhftoolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=armhf
+            msa-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=arm-linux-gnueabihf -march=armv7 -mfpu=neon" -DCMAKE_C_FLAGS="-latomic --target=arm-linux-gnueabihf -march=armv7 -mfpu=neon" -DCMAKE_CXX_FLAGS="-latomic --target=arm-linux-gnueabihf -march=armv7 -mfpu=neon" -DCMAKE_TOOLCHAIN_FILE=$PWD/armhftoolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=armhf
+          pkg-deps: libc6, ca-certificates, libxcursor1, libxinerama1, libxi6, libxrandr2, qml-module-qtquick2, qml-module-qtquick-layouts, qml-module-qtquick-controls, qml-module-qtquick-controls2, qml-module-qtquick-window2, qml-module-qtquick-dialogs, qml-module-qt-labs-settings, qml-module-qt-labs-folderlistmodel, qml-module-qtwebengine, libqt5svg5, libqt5concurrent5, libqt5webenginewidgets5, libzip4, qml-module-qtquick-templates2, libprotobuf23, libpulse0, libatomic1
         - name: bookworm
           container: buildpack-deps:bookworm
           deps: apt-get update && apt-get install -y --no-install-recommends g++ clang cmake make git ca-certificates libssl-dev libpng-dev libx11-dev libxcursor-dev libxinerama-dev libxi-dev libxrandr-dev libcurl4-openssl-dev libudev-dev libevdev-dev libegl1-mesa-dev libssl-dev libasound2 qt6-base-dev libqt6opengl6-dev qt6-webengine-dev qt6-declarative-dev qml6-module-qtquick qml6-module-qtquick-layouts qml6-module-qtquick-controls qml6-module-qtquick-window qml6-module-qtquick-dialogs qml6-module-qt-labs-settings qml6-module-qt-labs-folderlistmodel qml6-module-qtwebengine libssl-dev libcurl4-openssl-dev libuv1-dev libzip-dev libprotobuf-dev protobuf-compiler qt6-base-dev libqt6opengl6-dev qt6-webengine-dev qt6-declarative-dev libqt6svg6-dev qml6-module-qtquick-layouts qml6-module-qtquick-controls qml6-module-qtquick-controls qml6-module-qtquick-dialogs qml6-module-qt-labs-settings qml6-module-qt-labs-folderlistmodel
@@ -211,47 +225,26 @@ jobs:
             mcpelauncher-ui-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
             msa-manifest: -DQT_VERSION=6 -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
           pkg-deps: libc6, ca-certificates, libxcursor1, libxinerama1, libxi6, libxrandr2, qml6-module-qtquick, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-window, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, qml6-module-qtwebengine, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, libqt6svg6, libqt6concurrent6, libqt6webenginewidgets6, libzip4, qml6-module-qtqml-workerscript, qml6-module-qt-labs-platform, qml6-module-qtquick-templates, libprotobuf32, libpulse0, libatomic1
-        - name: fedora-36
-          container: fedora:36
-          deps: dnf install -y gcc-c++ clang cmake make git ca-certificates libstdc++ glibc-devel libpng-devel zlib-devel libX11-devel libXcursor-devel libXi-devel libXinerama-devel libXrandr-devel libcurl-devel systemd-devel libevdev-devel mesa-libEGL-devel alsa-lib pulseaudio-libs mesa-dri-drivers systemd-devel libXtst-devel openssl-devel qt5-qtbase-devel qt5-qtwebengine-devel qt5-qtdeclarative-devel qt5-qtsvg-devel qt5-qtquickcontrols qt5-qtquickcontrols2 libuv-devel libzip-devel protobuf-devel protobuf-compiler qt5-qtbase-devel qt5-qtwebengine-devel qt5-qtdeclarative-devel qt5-qtsvg-devel qt5-qtquickcontrols qt5-qtquickcontrols2 fedora-packager rpmdevtools
-          generator: RPM
-          cmakeflags:
-            mcpelauncher-manifest: -DCURL_EXT_EXTRA_OPTIONS="-DCMAKE_INSTALL_LIBDIR=lib"
-          pkg-deps: qt5-qtquickcontrols, qt5-qtquickcontrols2 # qt5-qtquickcontrols is part of qt6-declarative, which is automatically detected as dependency by cpack
-        - name: fedora-36
-          container: ""
+        - name: bookworm
+          container: debian:bookworm
           deps: |
+            dpkg --add-architecture armhf && dpkg --add-architecture armhf && apt update && apt-mark hold linux-libc-dev:amd64 && DEBIAN_FRONTEND=noninteractive apt install -y docker.io libfuse-dev:armhf wget texinfo apt-transport-https vim-common qemu-user chrpath libstdc++-11-dev:armhf libatomic1:armhf wget cmake g++-arm-linux-gnueabihf g++-arm-linux-gnueabihf patchelf git cmake pkg-config libssl-dev:armhf libcurl4-openssl-dev:armhf libpng-dev:armhf libx11-dev:armhf libxcursor-dev:armhf libxinerama-dev:armhf libxi-dev:armhf libxrandr-dev:armhf libssl-dev:armhf libudev-dev:armhf libevdev-dev:armhf libegl1-mesa-dev:armhf libgl1-mesa-dev:armhf libssl-dev:armhf libuv1-dev:armhf libzip-dev:armhf libprotobuf-dev:armhf protobuf-compiler jq curl binutils desktop-file-utils squashfs-tools libssl-dev:armhf libpulse-dev:armhf qt6-base-dev:armhf libqt6opengl6-dev:armhf qt6-webengine-dev:armhf qt6-webengine-dev-tools:armhf qt6-declarative-dev:armhf qml6-module-qtquick:armhf qml6-module-qtquick-layouts:armhf qml6-module-qtquick-controls:armhf qml6-module-qtquick-window:armhf qml6-module-qtquick-dialogs:armhf qml6-module-qt-labs-settings:armhf qml6-module-qt-labs-folderlistmodel:armhf qml6-module-qtwebengine:armhf qt6-base-dev:armhf libqt6opengl6-dev:armhf qt6-webengine-dev:armhf qt6-declarative-dev:armhf libqt6svg6-dev:armhf qml6-module-qtquick-layouts:armhf qml6-module-qtquick-controls:armhf qml6-module-qtquick-controls:armhf qml6-module-qtquick-dialogs:armhf qml6-module-qt-labs-settings:armhf qml6-module-qt-labs-folderlistmodel:armhf
             docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-            CONTAINER="$(docker run --platform linux/arm64 --rm -d fedora:36 tail -f /dev/null)"
-            mkdir fedora-sysroot
-            docker cp -a "$CONTAINER:/" - | tar -x -C "$PWD/fedora-sysroot/"
-            docker stop "$CONTAINER"
-            docker run --rm -v $PWD/fedora-sysroot:/fedora-sysroot --platform linux/x86_64 fedora:36 dnf --installroot=/fedora-sysroot/ --forcearch=aarch64 --releasever=36 -y install gcc-c++ clang cmake make git ca-certificates libstdc++ glibc-devel libpng-devel zlib-devel libX11-devel libXcursor-devel libXi-devel libXinerama-devel libXrandr-devel libcurl-devel systemd-devel libevdev-devel mesa-libEGL-devel alsa-lib pulseaudio-libs mesa-dri-drivers systemd-devel libXtst-devel openssl-devel qt5-qtbase-devel qt5-qtwebengine-devel qt5-qtdeclarative-devel qt5-qtsvg-devel qt5-qtquickcontrols qt5-qtquickcontrols2 libuv-devel libzip-devel protobuf-devel protobuf-compiler qt5-qtbase-devel qt5-qtwebengine-devel qt5-qtdeclarative-devel qt5-qtsvg-devel qt5-qtquickcontrols qt5-qtquickcontrols2 fedora-packager rpmdevtools pulseaudio-libs-devel
-            sudo ln -s "$PWD/fedora-sysroot/lib/ld-linux-aarch64.so.1" /lib/ld-linux-aarch64.so.1
-            sudo mkdir -p /usr/lib/rpm/
-            sudo mount --bind "$PWD/fedora-sysroot/usr/lib/rpm/" /usr/lib/rpm/
-            sudo mkdir -p /var/lib/rpm/
-            sudo mount --bind "$PWD/fedora-sysroot/var/lib/rpm/" /var/lib/rpm/
-            sudo mkdir -p /usr/lib/sysimage/rpm/
-            sudo mount --bind "$PWD/fedora-sysroot/usr/lib/sysimage/rpm/" /usr/lib/sysimage/rpm/
-            echo "PATH=$PATH:$PWD/fedora-sysroot/bin" >> $GITHUB_ENV
-            echo "LD_LIBRARY_PATH=$PWD/fedora-sysroot/lib64" >> $GITHUB_ENV
-            cat > toolchain.txt << EOF
-            set(CMAKE_SYSTEM_NAME Linux)
-            set(CMAKE_SYSROOT_COMPILE $PWD/fedora-sysroot)
-            set(CMAKE_SYSROOT_LINK $PWD/fedora-sysroot)
-            set(CMAKE_SYSTEM_PROCESSOR aarch64)
-            set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-            set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-            set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-            set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
-            EOF
-          generator: RPM
+            echo "PKG_CONFIG_PATH=/usr/lib/arm-linux-gnueabihf/pkgconfig/" >> $GITHUB_ENV
+            echo PATH=/usr/lib/arm-linux-gnueabihf/qt6/bin/:$PATH >> $GITHUB_PATH
+            curl -L -O https://raw.githubusercontent.com/ChristopherHX/linux-packaging-scripts/main/armhftoolchain.txt
+            curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.6/clang+llvm-15.0.6-x86_64-linux-gnu-ubuntu-18.04.tar.xz --output llvm.tar.xz
+            tar --no-same-owner -xf llvm.tar.xz
+            echo "$PWD/clang+llvm-15.0.6-x86_64-linux-gnu-ubuntu-18.04/bin" >> $GITHUB_PATH
+          generator: DEB
+          branch:
+            mcpelauncher-manifest: qt6
+            mcpelauncher-ui-manifest: qt6
           cmakeflags:
-            msa-manifest: -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
-            mcpelauncher-manifest: -DCURL_EXT_EXTRA_OPTIONS="-DCMAKE_INSTALL_LIBDIR=lib" -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
-            mcpelauncher-ui-manifest: -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
-          pkg-deps: qt5-qtquickcontrols, qt5-qtquickcontrols2 # qt5-qtquickcontrols is part of qt6-declarative, which is automatically detected as dependency by cpack
+            mcpelauncher-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=arm-linux-gnueabihf -march=armv7 -mfpu=neon" -DCMAKE_C_FLAGS="-latomic --target=arm-linux-gnueabihf -march=armv7 -mfpu=neon" -DCMAKE_CXX_FLAGS="-latomic --target=arm-linux-gnueabihf -march=armv7 -mfpu=neon" -DCMAKE_TOOLCHAIN_FILE=$PWD/armhftoolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=armhf
+            mcpelauncher-ui-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=arm-linux-gnueabihf -march=armv7 -mfpu=neon" -DCMAKE_C_FLAGS="-latomic --target=arm-linux-gnueabihf -march=armv7 -mfpu=neon" -DCMAKE_CXX_FLAGS="-latomic --target=arm-linux-gnueabihf -march=armv7 -mfpu=neon" -DCMAKE_TOOLCHAIN_FILE=$PWD/armhftoolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=armhf
+            msa-manifest: -DQT_VERSION=6 -DCMAKE_ASM_FLAGS="-latomic --target=arm-linux-gnueabihf -march=armv7 -mfpu=neon" -DCMAKE_C_FLAGS="-latomic --target=arm-linux-gnueabihf -march=armv7 -mfpu=neon" -DCMAKE_CXX_FLAGS="-latomic --target=arm-linux-gnueabihf -march=armv7 -mfpu=neon" -DCMAKE_TOOLCHAIN_FILE=$PWD/armhftoolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=armhf
+          pkg-deps: libc6, ca-certificates, libxcursor1, libxinerama1, libxi6, libxrandr2, qml6-module-qtquick, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-window, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, qml6-module-qtwebengine, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, libqt6svg6, libqt6concurrent6, libqt6webenginewidgets6, libzip4, qml6-module-qtqml-workerscript, qml6-module-qt-labs-platform, qml6-module-qtquick-templates, libprotobuf32, libpulse0, libatomic1
         - name: fedora-37
           container: fedora:37
           deps: dnf install -y gcc-c++ clang cmake make git ca-certificates libstdc++ glibc-devel libpng-devel zlib-devel libX11-devel libXcursor-devel libXi-devel libXinerama-devel libXrandr-devel libcurl-devel systemd-devel libevdev-devel mesa-libEGL-devel alsa-lib pulseaudio-libs mesa-dri-drivers systemd-devel libXtst-devel openssl-devel qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel libuv-devel libzip-devel protobuf-devel protobuf-compiler qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel fedora-packager rpmdevtools
@@ -324,6 +317,57 @@ jobs:
             sudo mount --bind "$PWD/fedora-sysroot/var/lib/rpm/" /var/lib/rpm/
             sudo mkdir -p /usr/lib/sysimage/rpm/
             sudo mount --bind "$PWD/fedora-sysroot/usr/lib/sysimage/rpm/" /usr/lib/sysimage/rpm/
+            echo "PATH=$PATH:$PWD/fedora-sysroot/bin" >> $GITHUB_ENV
+            echo "LD_LIBRARY_PATH=$PWD/fedora-sysroot/lib64" >> $GITHUB_ENV
+            cat > toolchain.txt << EOF
+            set(CMAKE_SYSTEM_NAME Linux)
+            set(CMAKE_SYSROOT_COMPILE $PWD/fedora-sysroot)
+            set(CMAKE_SYSROOT_LINK $PWD/fedora-sysroot)
+            set(CMAKE_SYSTEM_PROCESSOR aarch64)
+            set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+            set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+            set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+            set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+            EOF
+          generator: RPM
+          branch:
+            mcpelauncher-manifest: qt6
+            mcpelauncher-ui-manifest: qt6
+          cmakeflags:
+            msa-manifest: -DQT_VERSION=6 -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
+            mcpelauncher-manifest: -DCURL_EXT_EXTRA_OPTIONS="-DCMAKE_INSTALL_LIBDIR=lib" -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
+            mcpelauncher-ui-manifest: -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
+        - name: fedora-39
+          container: fedora:39
+          deps: dnf install -y gcc-c++ clang cmake make git ca-certificates libstdc++ glibc-devel libpng-devel zlib-devel libX11-devel libXcursor-devel libXi-devel libXinerama-devel libXrandr-devel libcurl-devel systemd-devel libevdev-devel mesa-libEGL-devel alsa-lib pulseaudio-libs mesa-dri-drivers systemd-devel libXtst-devel openssl-devel qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel libuv-devel libzip-devel protobuf-devel protobuf-compiler qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel fedora-packager rpmdevtools
+          generator: RPM
+          branch:
+            mcpelauncher-manifest: qt6
+            mcpelauncher-ui-manifest: qt6
+          cmakeflags:
+            msa-manifest: -DQT_VERSION=6
+            mcpelauncher-manifest: -DCURL_EXT_EXTRA_OPTIONS="-DCMAKE_INSTALL_LIBDIR=lib"
+        - name: fedora-39
+          container:
+            image: fedora:39
+            options: --privileged --cap-add=SYS_ADMIN
+          deps: |
+            dnf install -y dnf-plugins-core
+            dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+            dnf install -y docker-ce-cli clang cmake make git ca-certificates fedora-packager rpmdevtools which lld
+            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+            CONTAINER="$(docker run --platform linux/arm64 --rm -d fedora:39 tail -f /dev/null)"
+            mkdir fedora-sysroot
+            docker cp -a "$CONTAINER:/" - | tar -x -C "$PWD/fedora-sysroot/"
+            docker stop "$CONTAINER"
+            dnf --installroot="$PWD/fedora-sysroot/" --forcearch=aarch64 --releasever=39 -y install gcc-c++ clang cmake make git ca-certificates libstdc++ glibc-devel libpng-devel zlib-devel libX11-devel libXcursor-devel libXi-devel libXinerama-devel libXrandr-devel libcurl-devel systemd-devel libevdev-devel mesa-libEGL-devel alsa-lib pulseaudio-libs mesa-dri-drivers systemd-devel libXtst-devel openssl-devel qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel libuv-devel libzip-devel protobuf-devel protobuf-compiler qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel fedora-packager rpmdevtools pulseaudio-libs-devel
+            ln -s "$PWD/fedora-sysroot/lib/ld-linux-aarch64.so.1" /lib/ld-linux-aarch64.so.1
+            mkdir -p /usr/lib/rpm/
+            mount --bind "$PWD/fedora-sysroot/usr/lib/rpm/" /usr/lib/rpm/
+            mkdir -p /var/lib/rpm/
+            mount --bind "$PWD/fedora-sysroot/var/lib/rpm/" /var/lib/rpm/
+            mkdir -p /usr/lib/sysimage/rpm/
+            mount --bind "$PWD/fedora-sysroot/usr/lib/sysimage/rpm/" /usr/lib/sysimage/rpm/
             echo "PATH=$PATH:$PWD/fedora-sysroot/bin" >> $GITHUB_ENV
             echo "LD_LIBRARY_PATH=$PWD/fedora-sysroot/lib64" >> $GITHUB_ENV
             cat > toolchain.txt << EOF
