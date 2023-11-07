@@ -80,14 +80,14 @@ echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb kinetic-n
 echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb lunar-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
-### bullseye (x86_64 / arm64)
+### bullseye (x86_64 / arm64 / armhf)
 ```
-echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb bullseye-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
+echo "deb [arch=amd64,arm64,armhf] https://minecraft-linux.github.io/pkg/deb bullseye-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
-### bookworm (x86_64 / arm64)
+### bookworm (x86_64 / arm64 / armhf)
 ```
-echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb bookworm-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
+echo "deb [arch=amd64,arm64,armhf] https://minecraft-linux.github.io/pkg/deb bookworm-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
 # Fedora rpm repos
