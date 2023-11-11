@@ -62,9 +62,8 @@ jobs:
             curl -L https://github.com/Kitware/CMake/releases/download/v3.16.2/cmake-3.16.2-Linux-x86_64.tar.gz --output cmake.tar.gz
             tar --no-same-owner -xf cmake.tar.gz
             echo "$PWD/cmake-3.16.2-Linux-x86_64/bin" >> $GITHUB_PATH
-            curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.6/clang+llvm-15.0.6-x86_64-linux-gnu-ubuntu-18.04.tar.xz --output llvm.tar.xz
-            tar --no-same-owner -xf llvm.tar.xz
-            echo "$PWD/clang+llvm-15.0.6-x86_64-linux-gnu-ubuntu-18.04/bin" >> $GITHUB_PATH
+            echo "CC=clang-10" >> $GITHUB_ENV
+            echo "CXX=clang++-10" >> $GITHUB_ENV
           generator: DEB
           cmakeflags:
             mcpelauncher-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
