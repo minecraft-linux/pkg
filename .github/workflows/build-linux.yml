@@ -391,6 +391,10 @@ jobs:
         glfw:
         - true
         - false
+        # We are cross compiling so we have to set the ca bundle path or stop building curl
+        curlflags:
+        - DEB: -DCURL_EXT_EXTRA_OPTIONS="-DCURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt"
+          RPM: -DCURL_EXT_EXTRA_OPTIONS="-DCURL_CA_BUNDLE=/etc/pki/tls/certs/ca-bundle.crt"
         include:
         - cmakeflags:
             mcpelauncher-manifest: -DENABLE_DEV_PATHS=OFF
@@ -440,7 +444,7 @@ jobs:
 
         set(CPACK_GENERATOR "TGZ;${{ matrix.platform.generator }}")
         set(CPACK_PACKAGE_CONTACT "https://github.com/minecraft-linux/${{ matrix.repo }}/issues")
-        set(CPACK_PACKAGE_FILE_NAME "${{ matrix.repo }}${{ matrix.platform.suffix && format('-{0}', matrix.platform.suffix) }}${{ matrix.glfw && '-glfw' || ''}}-${{ inputs.version }}.${{ github.run_id }}.${{ github.run_attempt }}~${{ matrix.platform.name }}")
+        set(CPACK_PACKAGE_FILE_NAME "${{ matrix.repo }}${{ matrix.platform.suffix && format('-{0}', matrix.platform.suffix) }}${{ matrix.glfw && '-glfw' || ''}}-${{ inputs.version }}.${{ github.run_id }}.${{ github.run_attempt }}.${{ matrix.platform.name }}")
         set(CPACK_DEBIAN_PACKAGE_DEPENDS "${{ matrix.platform.pkg-deps || 'libc6, ca-certificates, libxcursor1, libxinerama1, libxi6, libxrandr2, qml-module-qtquick2, qml-module-qtquick-layouts, qml-module-qtquick-controls, qml-module-qtquick-controls2, qml-module-qtquick-window2, qml-module-qtquick-dialogs, qml-module-qt-labs-settings, qml-module-qt-labs-folderlistmodel, qml-module-qtwebengine, libqt5svg5, libqt5concurrent5, libqt5webenginewidgets5, libzip4, qml-module-qtquick-templates2, libprotobuf23' }}")
         set(CPACK_DEBIAN_PACKAGE_VERSION "${{ inputs.version }}.${{ github.run_id }}.${{ github.run_attempt }}~${{ matrix.platform.name }}")
         set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
@@ -453,7 +457,7 @@ jobs:
         include(CPack)
       shell: cp {0} mcpelauncher/CMakeLists.txt
     - name: Configure
-      run: cmake -S mcpelauncher -B mcpelauncher-build -DCMAKE_BUILD_TYPE=Release ${{ matrix.cmakeflags[matrix.repo] }} ${{ matrix.platform.cmakeflags[matrix.repo] }} ${{ matrix.glfw && '-DGAMEWINDOW_SYSTEM=GLFW -DFETCHCONTENT_SOURCE_DIR_GLFW3_EXT=$PWD/glfw' || '' }}
+      run: cmake -S mcpelauncher -B mcpelauncher-build -DCMAKE_BUILD_TYPE=Release ${{ matrix.cmakeflags[matrix.repo] }} ${{ matrix.platform.cmakeflags[matrix.repo] }} ${{ matrix.glfw && '-DGAMEWINDOW_SYSTEM=GLFW -DFETCHCONTENT_SOURCE_DIR_GLFW3_EXT=$PWD/glfw' || '' }} ${{ matrix.curlflags[matrix.platform.generator] }}
     - name: Package Source
       if: "false"
       run: cmake --build mcpelauncher-build --target package_source --parallel
