@@ -193,7 +193,7 @@ jobs:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
       - name: install actions/artifact
-        run: npm install @actions/artifact
+        run: npm install @actions/artifact@1.1.2
 
       - name: create release index and sync packages
         uses: actions/github-script@v6
