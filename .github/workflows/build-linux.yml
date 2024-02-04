@@ -275,8 +275,10 @@ jobs:
             echo "LD_LIBRARY_PATH=$PWD/fedora-sysroot/lib64" >> $GITHUB_ENV
             cat > toolchain.txt << EOF
             set(CMAKE_SYSTEM_NAME Linux)
-            set(CMAKE_SYSROOT_COMPILE $PWD/fedora-sysroot)
-            set(CMAKE_SYSROOT_LINK $PWD/fedora-sysroot)
+            set(CMAKE_SYSROOT $PWD/fedora-sysroot)
+            set(ENV{PKG_CONFIG_PATH} "")
+            set(ENV{PKG_CONFIG_LIBDIR} "${CMAKE_SYSROOT}/usr/lib/pkgconfig:${CMAKE_SYSROOT}/usr/share/pkgconfig")
+            set(ENV{PKG_CONFIG_SYSROOT_DIR} ${CMAKE_SYSROOT})
             set(CMAKE_SYSTEM_PROCESSOR aarch64)
             set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
             set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
@@ -321,8 +323,10 @@ jobs:
             echo "LD_LIBRARY_PATH=$PWD/fedora-sysroot/lib64" >> $GITHUB_ENV
             cat > toolchain.txt << EOF
             set(CMAKE_SYSTEM_NAME Linux)
-            set(CMAKE_SYSROOT_COMPILE $PWD/fedora-sysroot)
-            set(CMAKE_SYSROOT_LINK $PWD/fedora-sysroot)
+            set(CMAKE_SYSROOT $PWD/fedora-sysroot)
+            set(ENV{PKG_CONFIG_PATH} "")
+            set(ENV{PKG_CONFIG_LIBDIR} "${CMAKE_SYSROOT}/usr/lib/pkgconfig:${CMAKE_SYSROOT}/usr/share/pkgconfig")
+            set(ENV{PKG_CONFIG_SYSROOT_DIR} ${CMAKE_SYSROOT})
             set(CMAKE_SYSTEM_PROCESSOR aarch64)
             set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
             set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
@@ -372,8 +376,10 @@ jobs:
             echo "LD_LIBRARY_PATH=$PWD/fedora-sysroot/lib64" >> $GITHUB_ENV
             cat > toolchain.txt << EOF
             set(CMAKE_SYSTEM_NAME Linux)
-            set(CMAKE_SYSROOT_COMPILE $PWD/fedora-sysroot)
-            set(CMAKE_SYSROOT_LINK $PWD/fedora-sysroot)
+            set(CMAKE_SYSROOT $PWD/fedora-sysroot)
+            set(ENV{PKG_CONFIG_PATH} "")
+            set(ENV{PKG_CONFIG_LIBDIR} "${CMAKE_SYSROOT}/usr/lib/pkgconfig:${CMAKE_SYSROOT}/usr/share/pkgconfig")
+            set(ENV{PKG_CONFIG_SYSROOT_DIR} ${CMAKE_SYSROOT})
             set(CMAKE_SYSTEM_PROCESSOR aarch64)
             set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
             set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
@@ -425,7 +431,9 @@ jobs:
             cat > toolchain.txt << EOF
             set(CMAKE_SYSTEM_NAME Linux)
             set(CMAKE_SYSROOT $PWD/fedora-sysroot)
-            set(CMAKE_SYSROOT $PWD/fedora-sysroot)
+            set(ENV{PKG_CONFIG_PATH} "")
+            set(ENV{PKG_CONFIG_LIBDIR} "${CMAKE_SYSROOT}/usr/lib/pkgconfig:${CMAKE_SYSROOT}/usr/share/pkgconfig")
+            set(ENV{PKG_CONFIG_SYSROOT_DIR} ${CMAKE_SYSROOT})
             set(CMAKE_SYSTEM_PROCESSOR aarch64)
             set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
             set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
