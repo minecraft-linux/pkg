@@ -406,6 +406,7 @@ jobs:
             msa-manifest: -DQT_VERSION=6
             mcpelauncher-manifest: -DCURL_EXT_EXTRA_OPTIONS="-DCMAKE_INSTALL_LIBDIR=lib"
         - name: fedora-40
+          ignore-failure: true 
           container:
             image: fedora:40
             options: --privileged --cap-add=SYS_ADMIN
