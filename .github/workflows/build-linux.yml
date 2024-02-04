@@ -517,7 +517,7 @@ jobs:
         include(CPack)
       shell: cp {0} mcpelauncher/CMakeLists.txt
     - name: Configure
-      run: cmake -S mcpelauncher -B mcpelauncher-build -DCMAKE_BUILD_TYPE=Release ${{ matrix.cmakeflags[matrix.repo] }} ${{ matrix.platform.cmakeflags[matrix.repo] }} ${{ matrix.glfw && '-DGAMEWINDOW_SYSTEM=GLFW -DFETCHCONTENT_SOURCE_DIR_GLFW3_EXT=$PWD/glfw' || '' }} ${{ matrix.glfw && matrix.platform.generator == 'deb' && '-DGLFW_BUILD_WAYLAND=OFF' || '' }} ${{ matrix.curlflags[matrix.platform.generator] }}
+      run: cmake -S mcpelauncher -B mcpelauncher-build -DCMAKE_BUILD_TYPE=Release ${{ matrix.cmakeflags[matrix.repo] }} ${{ matrix.platform.cmakeflags[matrix.repo] }} ${{ matrix.glfw && '-DGAMEWINDOW_SYSTEM=GLFW -DFETCHCONTENT_SOURCE_DIR_GLFW3_EXT=$PWD/glfw' || '' }} ${{ matrix.glfw && '-DGLFW_BUILD_WAYLAND=OFF' || '' }} ${{ matrix.curlflags[matrix.platform.generator] }}
     - name: Package Source
       if: "false"
       run: cmake --build mcpelauncher-build --target package_source --parallel
