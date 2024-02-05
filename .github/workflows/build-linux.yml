@@ -64,13 +64,13 @@ jobs:
             set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
             EOF
           generator: RPM
-          branch:
-            mcpelauncher-manifest: qt6
-            mcpelauncher-ui-manifest: qt6
-          cmakeflags:
-            msa-manifest: -DQT_VERSION=6 -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
-            mcpelauncher-manifest: -DCURL_EXT_EXTRA_OPTIONS="-DCMAKE_INSTALL_LIBDIR=lib" -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
-            mcpelauncher-ui-manifest: -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
+        glfw:
+        - true
+        - false
+        # We are cross compiling so we have to set the ca bundle path or stop building curl
+        curlflags:
+        - DEB: -DCURL_EXT_EXTRA_OPTIONS="-DCURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt"
+          RPM: -DCURL_EXT_EXTRA_OPTIONS="-DCURL_CA_BUNDLE=/etc/pki/tls/certs/ca-bundle.crt"
         include:
         - cmakeflags:
             mcpelauncher-manifest: -DENABLE_DEV_PATHS=OFF
