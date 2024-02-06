@@ -271,7 +271,7 @@ jobs:
             sudo mount --bind "$PWD/fedora-sysroot/var/lib/rpm/" /var/lib/rpm/
             sudo mkdir -p /usr/lib/sysimage/rpm/
             sudo mount --bind "$PWD/fedora-sysroot/usr/lib/sysimage/rpm/" /usr/lib/sysimage/rpm/
-            echo "PATH=$PATH:$PWD/fedora-sysroot/bin" >> $GITHUB_ENV
+            echo "PATH=$PATH:$PWD/fedora-sysroot/bin:$PWD/fedora-sysroot/usr/bin" >> $GITHUB_ENV
             echo "LD_LIBRARY_PATH=$PWD/fedora-sysroot/lib64" >> $GITHUB_ENV
             echo "PKG_CONFIG_LIBDIR=$PWD/fedora-sysroot/usr/lib64/pkgconfig:$PWD/fedora-sysroot/usr/share/pkgconfig" >> $GITHUB_ENV
             cat > toolchain.txt << EOF
@@ -317,7 +317,7 @@ jobs:
             sudo mount --bind "$PWD/fedora-sysroot/var/lib/rpm/" /var/lib/rpm/
             sudo mkdir -p /usr/lib/sysimage/rpm/
             sudo mount --bind "$PWD/fedora-sysroot/usr/lib/sysimage/rpm/" /usr/lib/sysimage/rpm/
-            echo "PATH=$PATH:$PWD/fedora-sysroot/bin" >> $GITHUB_ENV
+            echo "PATH=$PATH:$PWD/fedora-sysroot/bin:$PWD/fedora-sysroot/usr/bin" >> $GITHUB_ENV
             echo "LD_LIBRARY_PATH=$PWD/fedora-sysroot/lib64" >> $GITHUB_ENV
             echo "PKG_CONFIG_LIBDIR=$PWD/fedora-sysroot/usr/lib64/pkgconfig:$PWD/fedora-sysroot/usr/share/pkgconfig" >> $GITHUB_ENV
             cat > toolchain.txt << EOF
@@ -368,7 +368,7 @@ jobs:
             mount --bind "$PWD/fedora-sysroot/var/lib/rpm/" /var/lib/rpm/
             mkdir -p /usr/lib/sysimage/rpm/
             mount --bind "$PWD/fedora-sysroot/usr/lib/sysimage/rpm/" /usr/lib/sysimage/rpm/
-            echo "PATH=$PATH:$PWD/fedora-sysroot/bin" >> $GITHUB_ENV
+            echo "PATH=$PATH:$PWD/fedora-sysroot/bin:$PWD/fedora-sysroot/usr/bin" >> $GITHUB_ENV
             echo "LD_LIBRARY_PATH=$PWD/fedora-sysroot/lib64" >> $GITHUB_ENV
             echo "PKG_CONFIG_LIBDIR=$PWD/fedora-sysroot/usr/lib64/pkgconfig:$PWD/fedora-sysroot/usr/share/pkgconfig" >> $GITHUB_ENV
             cat > toolchain.txt << EOF
@@ -421,7 +421,7 @@ jobs:
             mount --bind "$PWD/fedora-sysroot/var/lib/rpm/" /var/lib/rpm/
             mkdir -p /usr/lib/sysimage/rpm/
             mount --bind "$PWD/fedora-sysroot/usr/lib/sysimage/rpm/" /usr/lib/sysimage/rpm/
-            echo "PATH=$PATH:$PWD/fedora-sysroot/bin" >> $GITHUB_ENV
+            echo "PATH=$PATH:$PWD/fedora-sysroot/bin:$PWD/fedora-sysroot/usr/bin" >> $GITHUB_ENV
             echo "LD_LIBRARY_PATH=$PWD/fedora-sysroot/lib64" >> $GITHUB_ENV
             echo "PKG_CONFIG_LIBDIR=$PWD/fedora-sysroot/usr/lib64/pkgconfig:$PWD/fedora-sysroot/usr/share/pkgconfig" >> $GITHUB_ENV
             cat > toolchain.txt << EOF
