@@ -268,11 +268,17 @@ jobs:
             fs.writeFileSync("release-index.json", JSON.stringify({ packages: packages, index }));
       
       - name: add cppfw repo to install myci scripts from
-        uses: myci-actions/add-deb-repo@master
+        uses: myci-actions/add-deb-repo@HEAD
         with:
           repo: deb http://gagis.hopto.org/repo/cppfw/$(lsb_release --id --short | tr '[:upper:]' '[:lower:]') $(lsb_release --codename --short) main
           repo-name: cppfw
           keys-asc: http://gagis.hopto.org/repo/cppfw/pubkey.gpg
+      - name: add cppfw repo to install myci scripts from
+        uses: myci-actions/add-deb-repo@HEAD
+        with:
+          repo: deb http://gagis.hopto.org/repo/igagis/$(lsb_release --id --short | tr '[:upper:]' '[:lower:]') $(lsb_release --codename --short) main
+          repo-name: igagis
+          keys-asc: http://gagis.hopto.org/repo/igagis/pubkey.gpg
       - name: install debian package tools
         run: |
           sudo apt --quiet update
