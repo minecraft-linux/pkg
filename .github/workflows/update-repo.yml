@@ -276,11 +276,7 @@ jobs:
       - name: install debian package tools
         run: |
           sudo apt --quiet update
-          sudo apt --quiet install --assume-yes dpkg-dev debhelper devscripts myci rpm
-      - name: Install freight
-        run: |
-          git clone https://github.com/freight-team/freight.git
-          make -C freight && sudo make -C freight install
+          sudo apt --quiet install --assume-yes dpkg-dev debhelper devscripts myci rpm aptian
 
       - name: rpm setup signing macro
         run: |
@@ -302,7 +298,7 @@ jobs:
                 const globber = await glob.create(`packages/${repo.artifact}/**/*.deb`, { matchDirectories: false });
                 var packages = [];
                 for await (const file of globber.globGenerator()) {
-                  await exec.exec("myci-freight-add.sh", ["--base-dir", process.cwd(), "--repo", "webpage/deb", "--distro", repo.distro, "--component", repo.component, file]);
+                  await exec.exec("myci-aptian-add.sh", ["--base-dir", process.cwd(), "--repo", "webpage/deb", "--distro", repo.distro, "--component", repo.component, file]);
                 }
               } else if(repo.type === "rpm") {
                 const globber = await glob.create(`packages/${repo.artifact}/**/*.rpm`, { matchDirectories: false });
