@@ -236,8 +236,8 @@ jobs:
             downloadedfiles = {};
             var currentChannel = ${{ tojson(inputs.channel) }};
             var fixupTable = {};
-            if(index.allFiles) {
-              for(var file of index.allFiles) {
+            if(index.allfiles) {
+              for(var file of index.allfiles) {
                 fixupTable[path.basename(file)] = file;
               }
             }
