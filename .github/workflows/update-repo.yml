@@ -235,6 +235,12 @@ jobs:
             }
             downloadedfiles = {};
             var currentChannel = ${{ tojson(inputs.channel) }};
+            var fixupTable = {};
+            if(index.allFiles) {
+              for(var file of index.allFiles) {
+                fixupTable[path.basename(file)] = file;
+              }
+            }
             if(index.versions) {
               for(var channel in index.versions) {
                 var builds = index.versions[channel];
@@ -257,8 +263,9 @@ jobs:
                         } else {
                           downloadedfiles[fullpath] = f;
                         }
+                        var urlPath = fixupTable[path.basename(f.path)] || f.path;
                         fs.mkdirSync(path.dirname(fullpath), {recursive: true});
-                        await exec.exec("curl", ["-L", `${rootUrl}/${f.path}`, "--output", fullpath]);
+                        await exec.exec("curl", ["-L", `${rootUrl}/${urlPath}`, "--output", fullpath]);
                       }
                     }
                   }
