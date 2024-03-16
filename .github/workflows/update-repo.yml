@@ -54,8 +54,8 @@ on:
               "channel": "release"
             },
             {
-              "artifact": "mantic",
-              "distro": "mantic",
+              "artifact": "noble",
+              "distro": "noble",
               "component": "main",
               "type": "apt",
               "channel": "release"
