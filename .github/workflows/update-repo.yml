@@ -47,6 +47,20 @@ on:
               "channel": "release"
             },
             {
+              "artifact": "mantic",
+              "distro": "mantic",
+              "component": "main",
+              "type": "apt",
+              "channel": "release"
+            },
+            {
+              "artifact": "mantic",
+              "distro": "mantic",
+              "component": "main",
+              "type": "apt",
+              "channel": "release"
+            },
+            {
               "artifact": "bullseye",
               "distro": "bullseye",
               "component": "main",
@@ -81,6 +95,12 @@ on:
             {
               "artifact": "fedora-39",
               "path": "fedora-39",
+              "type": "rpm",
+              "channel": "release"
+            },
+            {
+              "artifact": "fedora-40",
+              "path": "fedora-40",
               "type": "rpm",
               "channel": "release"
             },
@@ -120,6 +140,20 @@ on:
               "channel": "nightly"
             },
             {
+              "artifact": "mantic-nightly",
+              "distro": "mantic-nightly",
+              "component": "main",
+              "type": "apt",
+              "channel": "nightly"
+            },
+            {
+              "artifact": "noble-nightly",
+              "distro": "noble-nightly",
+              "component": "main",
+              "type": "apt",
+              "channel": "nightly"
+            },
+            {
               "artifact": "bullseye-nightly",
               "distro": "bullseye-nightly",
               "component": "main",
@@ -154,6 +188,12 @@ on:
             {
               "artifact": "fedora-39-nightly",
               "path": "fedora-39-nightly",
+              "type": "rpm",
+              "channel": "nightly"
+            },
+            {
+              "artifact": "fedora-40-nightly",
+              "path": "fedora-40-nightly",
               "type": "rpm",
               "channel": "nightly"
             }
