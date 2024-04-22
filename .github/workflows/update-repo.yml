@@ -365,7 +365,11 @@ jobs:
                   var destPath = path.join("webpage", repo.path, path.basename(file));
                   console.log(`copy ${file} to ${destPath}`);
                   fs.copyFileSync(file, destPath);
-                  await exec.exec("rpm", ["--addsign", destPath]);
+                  try {
+                    await exec.exec("rpm", ["--addsign", destPath]);
+                  } catch {
+                    fs.unlinkSync(destPath);
+                  }
                 }
                 rpmrepos.push(`createrepo ${path.join("/webpage", repo.path)}`);
               }
