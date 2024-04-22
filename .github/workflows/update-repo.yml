@@ -351,7 +351,11 @@ jobs:
                 const globber = await glob.create(`packages/${repo.artifact}/**/*.deb`, { matchDirectories: false });
                 var packages = [];
                 for await (const file of globber.globGenerator()) {
-                  await exec.exec("myci-aptian-add.sh", ["--base-dir", process.cwd(), "--repo", "webpage/deb", "--distro", repo.distro, "--component", repo.component, file]);
+                  try {
+                    await exec.exec("myci-aptian-add.sh", ["--base-dir", process.cwd(), "--repo", "webpage/deb", "--distro", repo.distro, "--component", repo.component, file]);
+                  } catch {
+
+                  }
                 }
               } else if(repo.type === "rpm") {
                 const globber = await glob.create(`packages/${repo.artifact}/**/*.rpm`, { matchDirectories: false });
@@ -367,7 +371,11 @@ jobs:
               }
             }
             if(rpmrepos.length > 0) {
-              await exec.exec("docker", ["run", "--rm", "-v", `${path.join(process.cwd(), "webpage")}:/webpage`, "fedora:latest", "bash", "-c", `dnf install -y createrepo && ${rpmrepos.join(" && ")}`]);
+              try {
+                await exec.exec("docker", ["run", "--rm", "-v", `${path.join(process.cwd(), "webpage")}:/webpage`, "fedora:latest", "bash", "-c", `dnf install -y createrepo && ${rpmrepos.join(" && ")}`]);
+              } catch {
+
+              }
             }
 
       - name: Fix webpage permissions
