@@ -113,7 +113,7 @@ gpgkey=https://minecraft-linux.github.io/pkg/deb/pubkey.gpg
 EOF
 ```
 
-### 37 (x86_64 / arm64)
+### 37 (x86_64 / arm64) (**Deprecated** v0.11.4 is the last version)
 ```
 cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << 'EOF'
 [minecraft-linux-pkg]
@@ -161,22 +161,6 @@ gpgkey=https://minecraft-linux.github.io/pkg/deb/pubkey.gpg
 EOF
 ```
 ## Nightly
-
-### 37 (x86_64 / arm64)
-```
-cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << 'EOF'
-[minecraft-linux-pkg]
-name=minecraft-linux-pkg
-baseurl=https://minecraft-linux.github.io/pkg/fedora-37-nightly
-enabled=1
-countme=1
-repo_gpgcheck=0
-type=rpm
-gpgcheck=1
-skip_if_unavailable=False
-gpgkey=https://minecraft-linux.github.io/pkg/deb/pubkey.gpg
-EOF
-```
 
 ### 38 (x86_64 / arm64)
 ```
