@@ -305,7 +305,10 @@ jobs:
                         }
                         var urlPath = fixupTable[path.basename(f.path)] || f.path;
                         fs.mkdirSync(path.dirname(fullpath), {recursive: true});
-                        await exec.exec("curl", ["-L", `${rootUrl}/${urlPath}`, "--output", fullpath]);
+                        try {
+                          await exec.exec("curl", ["-f", "-L", `${rootUrl}/${urlPath}`, "--output", fullpath]);
+                        } catch {
+                        }
                       }
                     }
                   }
