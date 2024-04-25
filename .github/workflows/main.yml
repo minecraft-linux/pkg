@@ -45,7 +45,7 @@ jobs:
           "mcpelauncher-manifest": {
             "": ${{ tojson(inputs.mcpelauncher-manifest || '') }},
             "qt6": ${{ tojson(inputs.mcpelauncher-manifest-qt6 || '') }}
-          }
+          },
           "mcpelauncher-ui-manifest": {
             "": ${{ tojson(inputs.mcpelauncher-ui-manifest || '') }},
             "qt6": ${{ tojson(inputs.mcpelauncher-ui-manifest-qt6 || '') }}
