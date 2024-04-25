@@ -18,6 +18,18 @@ on:
       versionsdbremote:
         type: string
         default: master
+      mcpelauncher-manifest:
+        type: string
+        default: ""
+      mcpelauncher-manifest-qt6:
+        type: string
+        default: ""
+      mcpelauncher-ui-manifest:
+        type: string
+        default: ""
+      mcpelauncher-ui-manifest-qt6:
+        type: string
+        default: ""
 
 jobs:
   build:
@@ -28,6 +40,17 @@ jobs:
       version: ${{ inputs.version }}
       changelog: ${{ inputs.changelog }}
       versionsdbremote: ${{ inputs.versionsdbremote }}
+      shas: |-
+        {
+          "mcpelauncher-manifest": {
+            "": ${{ tojson(inputs.mcpelauncher-manifest) }},
+            "qt6": ${{ tojson(inputs.mcpelauncher-manifest-qt6) }}
+          }
+          "mcpelauncher-ui-manifest": {
+            "": ${{ tojson(inputs.mcpelauncher-ui-manifest) }},
+            "qt6": ${{ tojson(inputs.mcpelauncher-ui-manifest-qt6) }}
+          }
+        }
 
   deploy:
     if: "!failure() && !cancelled()"
