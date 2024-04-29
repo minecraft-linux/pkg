@@ -33,7 +33,7 @@ jobs:
         - name: fedora-40
           ignore-failure: true 
           container:
-            image: fedora:40
+            image: fedora:39
             options: --privileged --cap-add=SYS_ADMIN
           deps: |
             dnf install -y dnf-plugins-core
