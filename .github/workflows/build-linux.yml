@@ -320,6 +320,7 @@ jobs:
           pkg-deps: libc6, ca-certificates, libxcursor1, libxinerama1, libxi6, libxrandr2, qml6-module-qtquick, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-window, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, qml6-module-qtwebengine, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, libqt6svg6, libqt6concurrent6, libqt6webenginewidgets6, libzip4, qml6-module-qtqml-workerscript, qml6-module-qt-labs-platform, qml6-module-qtquick-templates, libprotobuf32, libpulse0, libatomic1
         - name: fedora-38
           container: fedora:38
+          ignore-failure: true # Deprecated
           deps: dnf install -y gcc-c++ clang cmake make git ca-certificates libstdc++ glibc-devel libpng-devel zlib-devel libX11-devel libXcursor-devel libXi-devel libXinerama-devel libXrandr-devel libcurl-devel systemd-devel libevdev-devel mesa-libEGL-devel alsa-lib pulseaudio-libs mesa-dri-drivers systemd-devel libXtst-devel openssl-devel qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel libuv-devel libzip-devel protobuf-devel protobuf-compiler qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel fedora-packager rpmdevtools alsa-lib-devel pulseaudio-libs-devel nas-devel pipewire-devel libX11-devel libXext-devel libXrandr-devel libXcursor-devel libXfixes-devel libXi-devel libXScrnSaver-devel dbus-devel ibus-devel fcitx-devel systemd-devel mesa-libGL-devel libxkbcommon-devel mesa-libGLES-devel mesa-libEGL-devel vulkan-devel wayland-devel wayland-protocols-devel libdrm-devel mesa-libgbm-devel libdecor-devel pipewire-jack-audio-connection-kit-devel wayland-devel libxkbcommon-devel wayland-protocols-devel extra-cmake-modules
           generator: RPM
           branch:
@@ -330,6 +331,7 @@ jobs:
             mcpelauncher-manifest: -DCURL_EXT_EXTRA_OPTIONS="-DCMAKE_INSTALL_LIBDIR=lib"
         - name: fedora-38
           container: ""
+          ignore-failure: true # Deprecated
           deps: |
             docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
             CONTAINER="$(docker run --platform linux/arm64 --rm -d fedora:38 tail -f /dev/null)"
@@ -429,7 +431,7 @@ jobs:
         - name: fedora-40
           ignore-failure: true 
           container:
-            image: fedora:40
+            image: fedora:39
             options: --privileged --cap-add=SYS_ADMIN
           deps: |
             dnf install -y dnf-plugins-core
@@ -449,7 +451,60 @@ jobs:
             mkdir -p /usr/lib/sysimage/rpm/
             mount --bind "$PWD/fedora-sysroot/usr/lib/sysimage/rpm/" /usr/lib/sysimage/rpm/
             echo "PATH=$PATH:$PWD/fedora-sysroot/bin:$PWD/fedora-sysroot/usr/bin" >> $GITHUB_ENV
-            echo "LD_LIBRARY_PATH=$PWD/fedora-sysroot/lib64" >> $GITHUB_ENV
+            echo "LD_LIBRARY_PATH=$PWD/fedora-sysroot/lib64:$PWD/fedora-sysroot/lib64/libproxy" >> $GITHUB_ENV
+            echo "PKG_CONFIG_LIBDIR=$PWD/fedora-sysroot/usr/lib64/pkgconfig:$PWD/fedora-sysroot/usr/share/pkgconfig" >> $GITHUB_ENV
+            cat > toolchain.txt << EOF
+            set(CMAKE_SYSTEM_NAME Linux)
+            set(CMAKE_SYSROOT $PWD/fedora-sysroot)
+            set(CMAKE_SYSTEM_PROCESSOR aarch64)
+            set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM BOTH)
+            set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+            set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+            set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+            EOF
+          generator: RPM
+          branch:
+            mcpelauncher-manifest: qt6
+            mcpelauncher-ui-manifest: qt6
+          cmakeflags:
+            msa-manifest: -DQT_VERSION=6 -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
+            mcpelauncher-manifest: -DCURL_EXT_EXTRA_OPTIONS="-DCMAKE_INSTALL_LIBDIR=lib" -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
+            mcpelauncher-ui-manifest: -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
+        - name: fedora-41
+          ignore-failure: true
+          container: fedora:41
+          deps: dnf install -y gcc-c++ clang cmake make git ca-certificates libstdc++ glibc-devel libpng-devel zlib-devel libX11-devel libXcursor-devel libXi-devel libXinerama-devel libXrandr-devel libcurl-devel systemd-devel libevdev-devel mesa-libEGL-devel alsa-lib pulseaudio-libs mesa-dri-drivers systemd-devel libXtst-devel openssl-devel qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel libuv-devel libzip-devel protobuf-devel protobuf-compiler qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel fedora-packager rpmdevtools alsa-lib-devel pulseaudio-libs-devel nas-devel pipewire-devel libX11-devel libXext-devel libXrandr-devel libXcursor-devel libXfixes-devel libXi-devel libXScrnSaver-devel dbus-devel ibus-devel fcitx-devel systemd-devel mesa-libGL-devel libxkbcommon-devel mesa-libGLES-devel mesa-libEGL-devel vulkan-devel wayland-devel wayland-protocols-devel libdrm-devel mesa-libgbm-devel libdecor-devel pipewire-jack-audio-connection-kit-devel wayland-devel libxkbcommon-devel wayland-protocols-devel extra-cmake-modules
+          generator: RPM
+          branch:
+            mcpelauncher-manifest: qt6
+            mcpelauncher-ui-manifest: qt6
+          cmakeflags:
+            msa-manifest: -DQT_VERSION=6
+            mcpelauncher-manifest: -DCURL_EXT_EXTRA_OPTIONS="-DCMAKE_INSTALL_LIBDIR=lib"
+        - name: fedora-41
+          ignore-failure: true 
+          container:
+            image: fedora:39
+            options: --privileged --cap-add=SYS_ADMIN
+          deps: |
+            dnf install -y dnf-plugins-core
+            dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+            dnf install -y docker-ce-cli clang cmake make git ca-certificates fedora-packager rpmdevtools which lld
+            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+            CONTAINER="$(docker run --platform linux/arm64 --rm -d fedora:41 tail -f /dev/null)"
+            mkdir fedora-sysroot
+            docker cp -a "$CONTAINER:/" - | tar -x -C "$PWD/fedora-sysroot/"
+            docker stop "$CONTAINER"
+            dnf --installroot="$PWD/fedora-sysroot/" --forcearch=aarch64 --releasever=41 -y install gcc-c++ clang cmake make git ca-certificates libstdc++ glibc-devel libpng-devel zlib-devel libX11-devel libXcursor-devel libXi-devel libXinerama-devel libXrandr-devel libcurl-devel systemd-devel libevdev-devel mesa-libEGL-devel alsa-lib pulseaudio-libs mesa-dri-drivers systemd-devel libXtst-devel openssl-devel qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel libuv-devel libzip-devel protobuf-devel protobuf-compiler qt6-qtbase-devel qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel fedora-packager rpmdevtools pulseaudio-libs-devel alsa-lib-devel pulseaudio-libs-devel nas-devel pipewire-devel libX11-devel libXext-devel libXrandr-devel libXcursor-devel libXfixes-devel libXi-devel libXScrnSaver-devel dbus-devel ibus-devel fcitx-devel systemd-devel mesa-libGL-devel libxkbcommon-devel mesa-libGLES-devel mesa-libEGL-devel vulkan-devel wayland-devel wayland-protocols-devel libdrm-devel mesa-libgbm-devel libdecor-devel pipewire-jack-audio-connection-kit-devel wayland-devel libxkbcommon-devel wayland-protocols-devel extra-cmake-modules
+            ln -s "$PWD/fedora-sysroot/lib/ld-linux-aarch64.so.1" /lib/ld-linux-aarch64.so.1
+            mkdir -p /usr/lib/rpm/
+            mount --bind "$PWD/fedora-sysroot/usr/lib/rpm/" /usr/lib/rpm/
+            mkdir -p /var/lib/rpm/
+            mount --bind "$PWD/fedora-sysroot/var/lib/rpm/" /var/lib/rpm/
+            mkdir -p /usr/lib/sysimage/rpm/
+            mount --bind "$PWD/fedora-sysroot/usr/lib/sysimage/rpm/" /usr/lib/sysimage/rpm/
+            echo "PATH=$PATH:$PWD/fedora-sysroot/bin:$PWD/fedora-sysroot/usr/bin" >> $GITHUB_ENV
+            echo "LD_LIBRARY_PATH=$PWD/fedora-sysroot/lib64:$PWD/fedora-sysroot/lib64/libproxy" >> $GITHUB_ENV
             echo "PKG_CONFIG_LIBDIR=$PWD/fedora-sysroot/usr/lib64/pkgconfig:$PWD/fedora-sysroot/usr/share/pkgconfig" >> $GITHUB_ENV
             cat > toolchain.txt << EOF
             set(CMAKE_SYSTEM_NAME Linux)
