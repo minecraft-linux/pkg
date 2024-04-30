@@ -109,7 +109,7 @@ on:
               "path": "fedora-41",
               "type": "rpm",
               "channel": "release"
-            },,
+            },
             {
               "artifact": "bionic-nightly",
               "distro": "bionic-nightly",
