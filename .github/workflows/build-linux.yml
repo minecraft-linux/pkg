@@ -533,7 +533,7 @@ jobs:
         include:
         - cmakeflags:
             mcpelauncher-manifest: -DENABLE_DEV_PATHS=OFF
-            mcpelauncher-ui-manifest: -DLAUNCHER_VERSION_NAME="${{ inputs.version }}.${{ github.run_id }}.${{ github.run_attempt }}" -DLAUNCHER_VERSION_CODE="${{ github.run_id }}" -DLAUNCHER_CHANGE_LOG="Launcher ${{ inputs.version }}<br/>${{ inputs.changelog }}" -DLAUNCHER_VERSIONDB_URL=https://raw.githubusercontent.com/minecraft-linux/mcpelauncher-versiondb/${{ inputs.versionsdbremote }}
+            mcpelauncher-ui-manifest: -DLAUNCHER_VERSION_NAME="${{ inputs.version }}.${{ github.run_id }}.${{ github.run_attempt }}" -DLAUNCHER_VERSION_CODE="${{ github.run_id }}" -DLAUNCHER_CHANGE_LOG="Launcher ${{ inputs.version }}<br/>${{ inputs.changelog }}" -DLAUNCHER_VERSIONDB_URL=https://raw.githubusercontent.com/minecraft-linux/mcpelauncher-versiondb/${{ inputs.versionsdbremote }} -DLAUNCHER_DISABLE_DEV_MODE=ON
             msa-manifest: -DENABLE_MSA_QT_UI=ON -DMSA_UI_PATH_DEV=OFF
         exclude:
         - glfw: true
