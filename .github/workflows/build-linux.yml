@@ -29,8 +29,8 @@ jobs:
       matrix:
         repo:
         - mcpelauncher-manifest
-        - mcpelauncher-ui-manifest
-        - msa-manifest
+        #- mcpelauncher-ui-manifest
+        #- msa-manifest
         platform:
         # - name: bionic
         #   container: buildpack-deps:bionic
@@ -351,6 +351,7 @@ jobs:
             echo "PATH=$PATH:$PWD/fedora-sysroot/bin:$PWD/fedora-sysroot/usr/bin" >> $GITHUB_ENV
             echo "LD_LIBRARY_PATH=$PWD/fedora-sysroot/lib64" >> $GITHUB_ENV
             echo "PKG_CONFIG_LIBDIR=$PWD/fedora-sysroot/usr/lib64/pkgconfig:$PWD/fedora-sysroot/usr/share/pkgconfig" >> $GITHUB_ENV
+            echo "PKG_CONFIG_SYSROOT_DIR=$PWD/fedora-sysroot" >> $GITHUB_ENV
             cat > toolchain.txt << EOF
             set(CMAKE_SYSTEM_NAME Linux)
             set(CMAKE_SYSROOT $PWD/fedora-sysroot)
@@ -402,6 +403,7 @@ jobs:
             echo "PATH=$PATH:$PWD/fedora-sysroot/bin:$PWD/fedora-sysroot/usr/bin" >> $GITHUB_ENV
             echo "LD_LIBRARY_PATH=$PWD/fedora-sysroot/lib64" >> $GITHUB_ENV
             echo "PKG_CONFIG_LIBDIR=$PWD/fedora-sysroot/usr/lib64/pkgconfig:$PWD/fedora-sysroot/usr/share/pkgconfig" >> $GITHUB_ENV
+            echo "PKG_CONFIG_SYSROOT_DIR=$PWD/fedora-sysroot" >> $GITHUB_ENV
             cat > toolchain.txt << EOF
             set(CMAKE_SYSTEM_NAME Linux)
             set(CMAKE_SYSROOT $PWD/fedora-sysroot)
@@ -455,6 +457,7 @@ jobs:
             echo "PATH=$PATH:$PWD/fedora-sysroot/bin:$PWD/fedora-sysroot/usr/bin" >> $GITHUB_ENV
             echo "LD_LIBRARY_PATH=$PWD/fedora-sysroot/lib64:$PWD/fedora-sysroot/lib64/libproxy" >> $GITHUB_ENV
             echo "PKG_CONFIG_LIBDIR=$PWD/fedora-sysroot/usr/lib64/pkgconfig:$PWD/fedora-sysroot/usr/share/pkgconfig" >> $GITHUB_ENV
+            echo "PKG_CONFIG_SYSROOT_DIR=$PWD/fedora-sysroot" >> $GITHUB_ENV
             cat > toolchain.txt << EOF
             set(CMAKE_SYSTEM_NAME Linux)
             set(CMAKE_SYSROOT $PWD/fedora-sysroot)
@@ -508,6 +511,7 @@ jobs:
             echo "PATH=$PATH:$PWD/fedora-sysroot/bin:$PWD/fedora-sysroot/usr/bin" >> $GITHUB_ENV
             echo "LD_LIBRARY_PATH=$PWD/fedora-sysroot/lib64:$PWD/fedora-sysroot/lib64/libproxy" >> $GITHUB_ENV
             echo "PKG_CONFIG_LIBDIR=$PWD/fedora-sysroot/usr/lib64/pkgconfig:$PWD/fedora-sysroot/usr/share/pkgconfig" >> $GITHUB_ENV
+            echo "PKG_CONFIG_SYSROOT_DIR=$PWD/fedora-sysroot" >> $GITHUB_ENV
             cat > toolchain.txt << EOF
             set(CMAKE_SYSTEM_NAME Linux)
             set(CMAKE_SYSROOT $PWD/fedora-sysroot)
@@ -542,6 +546,8 @@ jobs:
           repo: mcpelauncher-ui-manifest
         - glfw: true
           repo: msa-manifest
+        - platform:
+            generator: DEB
 
     container: ${{ matrix.platform.container}}
     env:
