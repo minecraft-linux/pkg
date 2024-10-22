@@ -61,6 +61,13 @@ on:
               "channel": "release"
             },
             {
+              "artifact": "oracular",
+              "distro": "oracular",
+              "component": "main",
+              "type": "apt",
+              "channel": "release"
+            },
+            {
               "artifact": "bullseye",
               "distro": "bullseye",
               "component": "main",
@@ -155,6 +162,13 @@ on:
             {
               "artifact": "noble-nightly",
               "distro": "noble-nightly",
+              "component": "main",
+              "type": "apt",
+              "channel": "nightly"
+            },
+            {
+              "artifact": "oracular-nightly",
+              "distro": "oracular-nightly",
               "component": "main",
               "type": "apt",
               "channel": "nightly"

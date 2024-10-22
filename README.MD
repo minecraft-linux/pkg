@@ -53,6 +53,11 @@ echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb mantic ma
 echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb noble main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
+### oracular (x86_64 / arm64)
+```
+echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb oracular main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
+```
+
 ### bullseye (x86_64 / arm64 / armhf)
 ```
 echo "deb [arch=amd64,arm64,armhf] https://minecraft-linux.github.io/pkg/deb bullseye main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
