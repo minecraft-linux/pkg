@@ -18,11 +18,6 @@ Releases before including v0.9.0 don't provide arm64 for debian, you may need to
 Releases before including v0.11.4 don't provide armhf for debian, you may need to add the nightly repo to install the armhf version.
 Releases before including v0.11.4 don't provide fedora 39 packages, you may need to add the nightly repo to install the fedora 39 version.
 
-### bionic (arm64)
-```
-echo "deb [arch=arm64] https://minecraft-linux.github.io/pkg/deb bionic main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
-```
-
 ### focal (x86_64 / arm64)
 ```
 echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb focal main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
@@ -59,11 +54,6 @@ echo "deb [arch=amd64,arm64,armhf] https://minecraft-linux.github.io/pkg/deb boo
 ```
 
 ## Nightly
-
-### bionic (arm64)
-```
-echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb bionic-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
-```
 
 ### focal (x86_64 / arm64)
 ```

@@ -5,16 +5,12 @@ jobs:
     strategy:
       matrix:
         distro:
-        - bionic
         - focal
         - jammy
         - kinetic
         arch:
         - amd64
         - arm64
-        exclude:
-        - distro: bionic
-          arch: arm64
     steps:
     - run: |
         docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
