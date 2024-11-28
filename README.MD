@@ -38,16 +38,6 @@ echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb jammy mai
 echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb kinetic main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
-### lunar (x86_64 / arm64)
-```
-echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb lunar main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
-```
-
-### mantic (x86_64 / arm64)
-```
-echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb mantic main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
-```
-
 ### noble (x86_64 / arm64)
 ```
 echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb noble main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
@@ -88,16 +78,6 @@ echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb jammy-nig
 ### kinetic (x86_64 / arm64)
 ```
 echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb kinetic-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
-```
-
-### lunar (x86_64 / arm64)
-```
-echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb lunar-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
-```
-
-### mantic (x86_64 / arm64)
-```
-echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb mantic-nightly main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
 ### noble (x86_64 / arm64)

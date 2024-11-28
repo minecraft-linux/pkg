@@ -9,7 +9,6 @@ jobs:
         - focal
         - jammy
         - kinetic
-        - lunar
         arch:
         - amd64
         - arm64
