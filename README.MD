@@ -1,6 +1,6 @@
 # mcpelauncher package repository
 
-Please read https://mcpelauncher.readthedocs.io for available packages.
+Please read https://minecraft-linux.github.io for available packages.
 
 # Debian and Ubuntu apt repos
 
