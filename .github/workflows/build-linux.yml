@@ -413,7 +413,7 @@ jobs:
         - name: fedora-41
           ignore-failure: true 
           container:
-            image: fedora:39
+            image: fedora:41
             options: --privileged --cap-add=SYS_ADMIN
           deps: |
             dnf install -y dnf-plugins-core
@@ -450,9 +450,9 @@ jobs:
             mcpelauncher-manifest: qt6
             mcpelauncher-ui-manifest: qt6
           cmakeflags:
-            msa-manifest: -DQT_VERSION=6 -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
-            mcpelauncher-manifest: -DCURL_EXT_EXTRA_OPTIONS="-DCMAKE_INSTALL_LIBDIR=lib" -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
-            mcpelauncher-ui-manifest: -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
+            msa-manifest: -DQT_VERSION=6 -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fclang-abi-compat=17 -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fclang-abi-compat=17 -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
+            mcpelauncher-manifest: -DCURL_EXT_EXTRA_OPTIONS="-DCMAKE_INSTALL_LIBDIR=lib" -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fclang-abi-compat=17 -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fclang-abi-compat=17 -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
+            mcpelauncher-ui-manifest: -DCMAKE_C_FLAGS="--target=aarch64-linux-gnu -fclang-abi-compat=17 -fuse-ld=lld" -DCMAKE_CXX_FLAGS="--target=aarch64-linux-gnu -fclang-abi-compat=17 -fuse-ld=lld --std=c++17" -DCMAKE_TOOLCHAIN_FILE="$PWD/toolchain.txt" -DCMAKE_MAKE_PROGRAM="$(which make)" -DCPACK_RPM_PACKAGE_ARCHITECTURE=aarch64
         glfw:
         - true
         - false
