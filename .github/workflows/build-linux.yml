@@ -417,7 +417,7 @@ jobs:
             options: --privileged --cap-add=SYS_ADMIN
           deps: |
             dnf install -y dnf-plugins-core
-            dnf config-manager addrepo https://download.docker.com/linux/fedora/docker-ce.repo
+            dnf config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo
             dnf install -y docker-ce-cli clang cmake make git ca-certificates fedora-packager rpmdevtools which lld
             docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
             CONTAINER="$(docker run --platform linux/arm64 --rm -d fedora:41 tail -f /dev/null)"
