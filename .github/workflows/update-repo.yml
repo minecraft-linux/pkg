@@ -247,7 +247,8 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+    # gpg breaks for rpm somehow in 24.04 / latest
+    runs-on: ubuntu-22.04
     env:
       BASE_URL: https://${{ github.repository_owner }}.github.io${{ github.repository_owner != github.event.repository.name && format('/{0}', github.event.repository.name) || '' }}
       REPO_NAME: ${{ github.repository_owner != github.event.repository.name && format('{0}-{1}', github.repository_owner, github.event.repository.name) || github.repository_owner }}
