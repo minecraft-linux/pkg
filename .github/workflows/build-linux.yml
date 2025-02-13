@@ -532,7 +532,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.platform.name }}${{inputs.channel && inputs.channel != 'release' && format('-{0}', inputs.channel) || '' }}
+        name: ${{ matrix.platform.name }}${{inputs.channel && inputs.channel != 'release' && format('-{0}', inputs.channel) || '' }}-${{ strategy.job-index }}
         path: |
           mcpelauncher-build/*.tar.*
           mcpelauncher-build/*.deb

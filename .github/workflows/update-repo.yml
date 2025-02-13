@@ -260,7 +260,7 @@ jobs:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
       - name: install actions/artifact
-        run: npm install @actions/artifact@1.1.2
+        run: npm install @actions/artifact
 
       - name: create release index and sync packages
         uses: actions/github-script@v7
@@ -281,15 +281,22 @@ jobs:
               console.log("Previous index is unavailable");
             }
             const artifactClient = artifact.create()
+            const listArtifactResponse = await artifactClient.listArtifacts({
+              latest: true
+            })
+            let artifacts = listArtifactResponse.artifacts
+
             for(var repo of config) {
               try {
-                const artifactName = repo.artifact;
-                const path = `packages/${artifactName}`
+                const path = `packages/${repo.artifact}`
                 const options = {
                     createArtifactFolder: false
                 }
 
-                const downloadResponse = await artifactClient.downloadArtifact(artifactName, path, options)
+                for(var artifactName of artifacts.map(artifact => artifact.name).filter(name => name === repo.artifact || name && name.startsWith(repo.artifact + "-"))) {
+
+                  const downloadResponse = await artifactClient.downloadArtifact(artifactName, path, options)
+                }
               } catch {
 
               }
