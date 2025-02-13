@@ -280,7 +280,7 @@ jobs:
             } catch {
               console.log("Previous index is unavailable");
             }
-            const artifactClient = artifact.create()
+            const artifactClient = new artifact.DefaultArtifactClient()
             const listArtifactResponse = await artifactClient.listArtifacts({
               latest: true
             })
