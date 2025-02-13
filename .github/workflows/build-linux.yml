@@ -530,7 +530,7 @@ jobs:
       run: cmake --build mcpelauncher-build --target package --parallel
     - name: Upload artifacts
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.platform.name }}${{inputs.channel && inputs.channel != 'release' && format('-{0}', inputs.channel) || '' }}
         path: |
