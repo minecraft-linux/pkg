@@ -302,6 +302,7 @@ jobs:
                 const path = `packages/${repo.artifact}`
                 const options = {
                     createArtifactFolder: false,
+                    path,
                     findBy: findByData
                 }
                 console.log("downloading " + repo.artifact + " to " + path)
@@ -309,7 +310,7 @@ jobs:
                 for(var art of artifacts.filter(a => a.name === repo.artifact || a.name && a.name.startsWith(repo.artifact + "-"))) {
                   try {
                      console.log(JSON.stringify({name: art.name, id: art.id, path, options}));
-                     const downloadResponse = await artifactClient.downloadArtifact(art.id, path, options);
+                     const downloadResponse = await artifactClient.downloadArtifact(art.id, options);
                   } catch(err) {
                     console.log(err)
                   }
