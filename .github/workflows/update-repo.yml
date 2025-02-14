@@ -300,14 +300,15 @@ jobs:
               try {
                 const path = `packages/${repo.artifact}`
                 const options = {
-                    createArtifactFolder: false
+                    createArtifactFolder: false,
+                    findBy: findByData
                 }
                 console.log("downloading " + repo.artifact + " to " + path)
 
                 for(var art of artifacts.filter(a => a.name === repo.artifact || a.name && a.name.startsWith(repo.artifact + "-"))) {
                   try {
-                     console.log(JSON.stringify({name: art.name, path, options}));
-                     const downloadResponse = await artifactClient.downloadArtifact(art.name, path, options);
+                     console.log(JSON.stringify({name: art.name, id: art.id, path, options}));
+                     const downloadResponse = await artifactClient.downloadArtifact(art.id, path, options);
                   } catch(err) {
                     console.log(err)
                   }
