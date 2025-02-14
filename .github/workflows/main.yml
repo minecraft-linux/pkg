@@ -61,6 +61,7 @@ jobs:
       contents: read
       pages: write
       id-token: write
+      actions: read
     needs: build
     uses: ./.github/workflows/update-repo.yml
     secrets: inherit
