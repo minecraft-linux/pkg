@@ -231,6 +231,10 @@ on:
             "nightly": 2,
             "release": 5
           }
+      findBy:
+        # findBy of artifacts action as json
+        type: string
+        default: ""
     secrets:
       GPG_PRIVATE_KEY: {}
 jobs:
@@ -281,24 +285,35 @@ jobs:
               console.log("Previous index is unavailable");
             }
             const artifactClient = new artifact.DefaultArtifactClient()
+            var findByData = JSON.parse(${{ tojson(inputs.findBy || 'null') }});
+            if(findByData && !findByData.token) {
+              findByData.token = ${{ tojson(github.token) }};
+            }
             const listArtifactResponse = await artifactClient.listArtifacts({
-              latest: true
+              latest: true,
+              findBy: findByData
             })
-            let artifacts = listArtifactResponse.artifacts
-
+            let artifacts = listArtifactResponse.artifacts;
+            
+            console.log(JSON.stringify(artifacts))
             for(var repo of config) {
               try {
                 const path = `packages/${repo.artifact}`
                 const options = {
                     createArtifactFolder: false
                 }
+                console.log("downloading " + repo.artifact + " to " + path)
 
-                for(var artifactName of artifacts.map(artifact => artifact.name).filter(name => name === repo.artifact || name && name.startsWith(repo.artifact + "-"))) {
-
-                  const downloadResponse = await artifactClient.downloadArtifact(artifactName, path, options)
+                for(var art of artifacts.filter(a => a.name === repo.artifact || a.name && artifact.name.startsWith(a.artifact + "-"))) {
+                  try {
+                     console.log(JSON.stringify({art.name, path, options}));
+                     const downloadResponse = await artifactClient.downloadArtifact(art.name, path, options);
+                  } catch(err) {
+                    console.log(err)
+                  }
                 }
-              } catch {
-
+              } catch(err) {
+                  console.log(err)
               }
             }
             const globber = await glob.create("packages/**", { matchDirectories: false });

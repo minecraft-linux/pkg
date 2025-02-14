@@ -9,9 +9,12 @@ on:
       channel:
         type: string
         default: release
+      findBy:
+        type: string
+        default: ""
       version:
         type: string
-        default: "0.8.2"
+        default: "1.2.0"
       changelog:
         type: string
         default: ""
@@ -63,6 +66,7 @@ jobs:
     secrets: inherit
     with:
       channel: ${{ inputs.channel }}
+      findBy: ${{ inputs.findBy }}
 
   update-version:
     if: "!failure() && !cancelled() && !inputs.redeploy && inputs.channel == 'release'"
