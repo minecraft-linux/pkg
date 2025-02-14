@@ -306,7 +306,7 @@ jobs:
 
                 for(var art of artifacts.filter(a => a.name === repo.artifact || a.name && artifact.name.startsWith(a.artifact + "-"))) {
                   try {
-                     console.log(JSON.stringify({art.name, path, options}));
+                     console.log(JSON.stringify({name: art.name, path, options}));
                      const downloadResponse = await artifactClient.downloadArtifact(art.name, path, options);
                   } catch(err) {
                     console.log(err)
