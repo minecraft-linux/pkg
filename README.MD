@@ -9,8 +9,10 @@ Please read https://minecraft-linux.github.io for available packages.
 First of all your system have to trust the gpg key used to sign the repository, then you can add the distribution specfic apt repo.
 
 ```
-curl -sS https://minecraft-linux.github.io/pkg/deb/pubkey.gpg | sudo tee -a /etc/apt/trusted.gpg.d/minecraft-linux-pkg.asc
+curl -sS https://minecraft-linux.github.io/pkg/deb/pubkey.gpg | sudo tee /etc/apt/trusted.gpg.d/minecraft-linux-pkg.asc
 ```
+
+(EDIT removed -a from tee, to override per #13. Using an entire new gpg key would be better)
 
 ## Releases
 
