@@ -45,6 +45,11 @@ echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb noble mai
 echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb oracular main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
 
+### plucky (x86_64 / arm64)
+```
+echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb plucky main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
+```
+
 ### bullseye (x86_64 / arm64 / armhf)
 ```
 echo "deb [arch=amd64,arm64,armhf] https://minecraft-linux.github.io/pkg/deb bullseye main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
@@ -190,6 +195,22 @@ gpgkey=https://minecraft-linux.github.io/pkg/deb/pubkey.gpg
 EOF
 ```
 
+### 42 (x86_64 / arm64)
+```
+cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << 'EOF'
+[minecraft-linux-pkg]
+name=minecraft-linux-pkg
+baseurl=https://minecraft-linux.github.io/pkg/fedora-42
+enabled=1
+countme=1
+repo_gpgcheck=0
+type=rpm
+gpgcheck=1
+skip_if_unavailable=False
+gpgkey=https://minecraft-linux.github.io/pkg/deb/pubkey.gpg
+EOF
+```
+
 ## Nightly
 
 ### 38 (x86_64 / arm64)
@@ -246,6 +267,22 @@ cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << 'EOF'
 [minecraft-linux-pkg]
 name=minecraft-linux-pkg
 baseurl=https://minecraft-linux.github.io/pkg/fedora-41-nightly
+enabled=1
+countme=1
+repo_gpgcheck=0
+type=rpm
+gpgcheck=1
+skip_if_unavailable=False
+gpgkey=https://minecraft-linux.github.io/pkg/deb/pubkey.gpg
+EOF
+```
+
+### 42 (x86_64 / arm64)
+```
+cat | sudo tee /etc/yum.repos.d/minecraft-linux-pkg.repo << 'EOF'
+[minecraft-linux-pkg]
+name=minecraft-linux-pkg
+baseurl=https://minecraft-linux.github.io/pkg/fedora-42-nightly
 enabled=1
 countme=1
 repo_gpgcheck=0
