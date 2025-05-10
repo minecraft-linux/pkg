@@ -125,8 +125,8 @@ on:
               "channel": "release"
             },
             {
-              "artifact": "fedora-41",
-              "path": "fedora-41",
+              "artifact": "fedora-42",
+              "path": "fedora-42",
               "type": "rpm",
               "channel": "release"
             },
