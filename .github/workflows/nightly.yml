@@ -23,7 +23,7 @@ jobs:
     with:
       channel: nightly
       version: ${{ needs.pre-build.outputs.version }}
-      changelog: "New Nightly Snapshot"
+      changelog: "<p>New Nightly Snapshot ${{ needs.pre-build.outputs.version }}</p>"
       versionsdbremote: master
 
   deploy:

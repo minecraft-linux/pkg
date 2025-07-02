@@ -333,7 +333,22 @@ jobs:
                 }
                 console.log("downloading " + repo.artifact + " to " + path)
 
-                for(var art of artifacts.filter(a => a.name === repo.artifact || a.name && a.name.startsWith(repo.artifact + "-"))) {
+                // Bug bionic-<no> and bionic-nightly-<no>, prefix alone is buggy
+                let predicate = (name, artifact) => {
+                  if (name === artifact) {
+                      return true;
+                  }
+                  const prefix = `${artifact}-`;
+                  if (name.startsWith(prefix)) {
+                    const remainder = name.slice(prefix.length);
+                    if (!isNaN(remainder) && Number.isInteger(Number(remainder))) {
+                      return true;
+                    }
+                  }
+                  return false;
+                };
+
+                for(var art of artifacts.filter(a => predicate(a.name, repo.artifact))) {
                   try {
                      console.log(JSON.stringify({name: art.name, id: art.id, path, options}));
                      const downloadResponse = await artifactClient.downloadArtifact(art.id, options);
