@@ -125,17 +125,6 @@ jobs:
             mcpelauncher-ui-manifest: -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
             msa-manifest: -DQT_VERSION=6 -DCMAKE_ASM_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_C_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_CXX_FLAGS="-latomic --target=aarch64-linux-gnu" -DCMAKE_TOOLCHAIN_FILE=$PWD/arm64toolchain.txt -DCPACK_DEBIAN_PACKAGE_ARCHITECTURE=arm64
           pkg-deps: libc6, ca-certificates, libxcursor1, libxinerama1, libxi6, libxrandr2, qml6-module-qtquick, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-window, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, qml6-module-qtwebengine, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, libqt6svg6, libqt6concurrent6, libqt6webenginewidgets6, libzip4, qml6-module-qtqml-workerscript, qml6-module-qt-labs-platform, qml6-module-qtquick-templates, libprotobuf32t64, libpulse0, libatomic1, libsecret-1-0
-        - name: oracular
-          container: buildpack-deps:oracular
-          ignore-failure: true
-          deps: apt-get update && apt-get install -y --no-install-recommends g++ clang cmake make git ca-certificates libssl-dev libsecret-1-dev libpng-dev libx11-dev libxcursor-dev libxinerama-dev libxi-dev libxrandr-dev libcurl4-openssl-dev libudev-dev libevdev-dev libegl1-mesa-dev libssl-dev libsecret-1-dev qt6-base-dev libqt6opengl6-dev qt6-webengine-dev qt6-webengine-dev-tools qt6-declarative-dev qml6-module-qtquick qml6-module-qtquick-layouts qml6-module-qtquick-controls qml6-module-qtquick-window qml6-module-qtquick-dialogs qml6-module-qt-labs-settings qml6-module-qt-labs-folderlistmodel qml6-module-qtwebengine libssl-dev libsecret-1-dev libcurl4-openssl-dev libuv1-dev libzip-dev libprotobuf-dev protobuf-compiler qt6-base-dev libqt6opengl6-dev qt6-webengine-dev qt6-declarative-dev libqt6svg6-dev qml6-module-qtquick-layouts qml6-module-qtquick-controls qml6-module-qtquick-controls qml6-module-qtquick-dialogs qml6-module-qt-labs-settings qml6-module-qt-labs-folderlistmodel libasound2-dev libpulse-dev libaudio-dev libsndio-dev libpipewire-0.3-dev
-          generator: DEB
-          branch:
-            mcpelauncher-manifest: qt6
-            mcpelauncher-ui-manifest: qt6
-          cmakeflags:
-            msa-manifest: -DQT_VERSION=6
-          pkg-deps: libc6, ca-certificates, libxcursor1, libxinerama1, libxi6, libxrandr2, qml6-module-qtquick, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-window, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, qml6-module-qtwebengine, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, qml6-module-qt-labs-settings, qml6-module-qt-labs-folderlistmodel, libqt6svg6, libqt6concurrent6, libqt6webenginewidgets6, libzip4, qml6-module-qtqml-workerscript, qml6-module-qt-labs-platform, qml6-module-qtquick-templates, libprotobuf32t64, libsecret-1-0
         - name: plucky
           container: buildpack-deps:plucky
           ignore-failure: true

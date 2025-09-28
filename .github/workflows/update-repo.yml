@@ -75,6 +75,13 @@ on:
               "channel": "release"
             },
             {
+              "artifact": "questing",
+              "distro": "questing",
+              "component": "main",
+              "type": "apt",
+              "channel": "release"
+            },
+            {
               "artifact": "bullseye",
               "distro": "bullseye",
               "component": "main",
@@ -189,6 +196,13 @@ on:
             {
               "artifact": "plucky-nightly",
               "distro": "plucky-nightly",
+              "component": "main",
+              "type": "apt",
+              "channel": "nightly"
+            },
+            {
+              "artifact": "questing-nightly",
+              "distro": "questing-nightly",
               "component": "main",
               "type": "apt",
               "channel": "nightly"
