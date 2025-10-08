@@ -412,6 +412,9 @@ jobs:
                         }
                         var urlPath = fixupTable[path.basename(f.path)] || f.path;
                         fs.mkdirSync(path.dirname(fullpath), {recursive: true});
+                        if(f.pkgpath.match(/v\d+\.\d+\.\d+/g)) {
+                          continue;
+                        }
                         try {
                           await exec.exec("curl", ["-f", "-L", `${rootUrl}/${urlPath}`, "--output", fullpath]);
                         } catch {
@@ -574,3 +577,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
