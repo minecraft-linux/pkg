@@ -96,6 +96,13 @@ on:
               "channel": "release"
             },
             {
+              "artifact": "trixie",
+              "distro": "trixie",
+              "component": "main",
+              "type": "apt",
+              "channel": "release"
+            },
+            {
               "artifact": "fedora-36",
               "path": "fedora-36",
               "type": "rpm",
@@ -134,6 +141,12 @@ on:
             {
               "artifact": "fedora-42",
               "path": "fedora-42",
+              "type": "rpm",
+              "channel": "release"
+            },
+            {
+              "artifact": "fedora-43",
+              "path": "fedora-43",
               "type": "rpm",
               "channel": "release"
             },
@@ -222,6 +235,13 @@ on:
               "channel": "nightly"
             },
             {
+              "artifact": "trixie-nightly",
+              "distro": "trixie-nightly",
+              "component": "main",
+              "type": "apt",
+              "channel": "nightly"
+            },
+            {
               "artifact": "fedora-36-nightly",
               "path": "fedora-36-nightly",
               "type": "rpm",
@@ -260,6 +280,12 @@ on:
             {
               "artifact": "fedora-42-nightly",
               "path": "fedora-42-nightly",
+              "type": "rpm",
+              "channel": "nightly"
+            },
+            {
+              "artifact": "fedora-43-nightly",
+              "path": "fedora-43-nightly",
               "type": "rpm",
               "channel": "nightly"
             }
