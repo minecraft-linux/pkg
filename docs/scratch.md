@@ -1,0 +1,1 @@
+- `qt6-tools-dev(:[^ ]+)? ` to `qt6-tools-dev$1 qt6-l10n-tools$1 ` matches all arch variants and adds a package
