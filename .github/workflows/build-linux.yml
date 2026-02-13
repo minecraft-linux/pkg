@@ -593,6 +593,21 @@ jobs:
       CC: clang
       CXX: clang++
     steps:
+    - name: Download static Docker CLI
+      if: contains(matrix.platform.deps, 'docker')
+      run: |
+        DOCKER_VERSION="29.0.0"
+        curl -fsSL "https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz" -o docker.tgz
+        tar -xzf docker.tgz
+        mkdir -p "$HOME/.local/bin"
+        mv docker/docker "$HOME/.local/bin/docker"
+        chmod +x "$HOME/.local/bin/docker"
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
+  
+    - name: Verify docker version
+      run: docker version
+      if: contains(matrix.platform.deps, 'docker')
+
     - name: Install Deps
       run: ${{ matrix.platform.deps }}
       shell: bash
@@ -654,3 +669,4 @@ jobs:
           mcpelauncher-build/*.tar.*
           mcpelauncher-build/*.deb
           mcpelauncher-build/*.rpm
+
