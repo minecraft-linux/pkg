@@ -596,6 +596,7 @@ jobs:
     - name: Download static Docker CLI
       if: contains(matrix.platform.deps, 'docker')
       run: |
+        (sudo apt update || apt update || :) && (sudo apt install -y curl || apt install -y curl || sudo dnf install curl || dnf install curl)
         DOCKER_VERSION="29.0.0"
         curl -fsSL "https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz" -o docker.tgz
         tar -xzf docker.tgz
@@ -669,4 +670,5 @@ jobs:
           mcpelauncher-build/*.tar.*
           mcpelauncher-build/*.deb
           mcpelauncher-build/*.rpm
+
 
