@@ -553,14 +553,14 @@ jobs:
           label: ubuntu-24.04
           ignore-failure: true
           container: fedora:43
-          deps: &fedora-deps dnf install -y gcc-c++ clang cmake make git ca-certificates libstdc++ glibc-devel libpng-devel zlib-devel libX11-devel libXcursor-devel libXi-devel libXinerama-devel libXrandr-devel libcurl-devel systemd-devel libevdev-devel mesa-libEGL-devel alsa-lib pulseaudio-libs mesa-dri-drivers systemd-devel libXtst-devel openssl-devel qt6-qtbase-devel qt6-qttools-devel qt6-linguist qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel libuv-devel libzip-devel protobuf-devel protobuf-compiler qt6-qtbase-devel qt6-qttools-devel qt6-linguist qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel fedora-packager rpmdevtools alsa-lib-devel pulseaudio-libs-devel nas-devel pipewire-devel libX11-devel libXext-devel libXrandr-devel libXcursor-devel libXfixes-devel libXi-devel libXScrnSaver-devel dbus-devel ibus-devel fcitx-devel systemd-devel mesa-libGL-devel libxkbcommon-devel mesa-libGLES-devel mesa-libEGL-devel vulkan-devel wayland-devel wayland-protocols-devel libdrm-devel mesa-libgbm-devel libdecor-devel pipewire-jack-audio-connection-kit-devel wayland-devel libxkbcommon-devel wayland-protocols-devel extra-cmake-modules libsecret-devel
+          deps: &fedora-deps dnf install -y gcc-c++ clang cmake make git ca-certificates libstdc++ glibc-devel libpng-devel zlib-devel libX11-devel libXcursor-devel libXi-devel libXinerama-devel libXrandr-devel libcurl-devel systemd-devel libevdev-devel mesa-libEGL-devel alsa-lib pulseaudio-libs mesa-dri-drivers systemd-devel libXtst-devel openssl-devel qt6-qtbase-devel qt6-qttools-devel qt6-linguist qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel libuv-devel libzip-devel protobuf-devel protobuf-compiler qt6-qtbase-devel qt6-qttools-devel qt6-linguist qt6-qtwebengine-devel qt6-qtdeclarative-devel qt6-qtsvg-devel fedora-packager rpmdevtools alsa-lib-devel pulseaudio-libs-devel nas-devel pipewire-devel libX11-devel libXext-devel libXrandr-devel libXcursor-devel libXfixes-devel libXi-devel libXScrnSaver-devel dbus-devel ibus-devel fcitx-devel systemd-devel mesa-libGL-devel libxkbcommon-devel mesa-libGLES-devel mesa-libEGL-devel vulkan-devel wayland-devel wayland-protocols-devel libdrm-devel mesa-libgbm-devel libdecor-devel pipewire-jack-audio-connection-kit-devel wayland-devel libxkbcommon-devel wayland-protocols-devel extra-cmake-modules libsecret-devel SDL3-devel
           generator: &fedora-gen RPM
           branch: &branch-qt6
             mcpelauncher-manifest: qt6
             mcpelauncher-ui-manifest: qt6
           cmakeflags: &fedora-cmake
             msa-manifest: -DQT_VERSION=6
-            mcpelauncher-manifest: -DCURL_EXT_EXTRA_OPTIONS="-DCMAKE_INSTALL_LIBDIR=lib"
+            mcpelauncher-manifest: -DCURL_EXT_EXTRA_OPTIONS="-DCMAKE_INSTALL_LIBDIR=lib" -DGAMEWINDOW_SYSTEM=SDL3
         - name: fedora-43
           label: ubuntu-24.04-arm
           ignore-failure: true
