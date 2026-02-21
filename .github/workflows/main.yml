@@ -74,7 +74,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: deploy
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - run: echo "${{ inputs.version }}" > version.txt
     - name: Commit changes
       run: |
