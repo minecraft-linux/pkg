@@ -210,6 +210,21 @@ skip_if_unavailable=False
 gpgkey=https://minecraft-linux.github.io/pkg/deb/pubkey.gpg
 EOF
 ```
+### 43 (x86_64 / arm64)
+```
+sudo tee minecraft-linux-pkg.repo << EOL
+[minecraft-linux-pkg]
+name=minecraft-linux-pkg
+baseurl=https://minecraft-linux.github.io/pkg/fedora-42
+enabled=1
+countme=1
+repo_gpgcheck=0
+type=rpm
+gpgcheck=1
+skip_if_unavailable=False
+gpgkey=https://minecraft-linux.github.io/pkg/deb/pubkey.gpg
+EOL
+```
 
 ## Nightly
 
