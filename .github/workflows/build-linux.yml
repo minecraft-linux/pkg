@@ -560,11 +560,27 @@ jobs:
             mcpelauncher-ui-manifest: qt6
           cmakeflags: &fedora-cmake
             msa-manifest: -DQT_VERSION=6
-            mcpelauncher-manifest: -DCURL_EXT_EXTRA_OPTIONS="-DCMAKE_INSTALL_LIBDIR=lib" -DGAMEWINDOW_SYSTEM=SDL3
+            mcpelauncher-manifest: -DUSE_OWN_CURL=OFF -DGAMEWINDOW_SYSTEM=SDL3
         - name: fedora-43
           label: ubuntu-24.04-arm
           ignore-failure: true
           container: fedora:43
+          deps: *fedora-deps
+          generator: *fedora-gen
+          branch: *branch-qt6
+          cmakeflags: *fedora-cmake
+        - name: fedora-44
+          label: ubuntu-24.04
+          ignore-failure: true
+          container: fedora:44
+          deps: *fedora-deps
+          generator: *fedora-gen
+          branch: *branch-qt6
+          cmakeflags: *fedora-cmake
+        - name: fedora-44
+          label: ubuntu-24.04-arm
+          ignore-failure: true
+          container: fedora:44
           deps: *fedora-deps
           generator: *fedora-gen
           branch: *branch-qt6
