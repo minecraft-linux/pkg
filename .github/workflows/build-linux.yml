@@ -559,8 +559,9 @@ jobs:
             mcpelauncher-manifest: qt6
             mcpelauncher-ui-manifest: qt6
           cmakeflags: &fedora-cmake
-            msa-manifest: -DQT_VERSION=6
-            mcpelauncher-manifest: -DUSE_OWN_CURL=OFF -DGAMEWINDOW_SYSTEM=SDL3
+            msa-manifest: -DQT_VERSION=6 -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+            mcpelauncher-manifest: -DUSE_OWN_CURL=OFF -DGAMEWINDOW_SYSTEM=SDL3 -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+            mcpelauncher-ui-manifest: -DCMAKE_POLICY_VERSION_MINIMUM=3.5
         - name: fedora-43
           label: ubuntu-24.04-arm
           ignore-failure: true
