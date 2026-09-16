@@ -51,6 +51,7 @@ echo "deb [arch=amd64,arm64] https://minecraft-linux.github.io/pkg/deb plucky ma
 ```
 
 ### bullseye (x86_64 / arm64 / armhf)
+Removed in 1.8.0
 ```
 echo "deb [arch=amd64,arm64,armhf] https://minecraft-linux.github.io/pkg/deb bullseye main" | sudo tee /etc/apt/sources.list.d/minecraft-linux-pkg.list
 ```
