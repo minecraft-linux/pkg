@@ -10,7 +10,7 @@ jobs:
   pre-build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - run: npm install -g semver
     - run: echo "version=$(semver "$(cat version.txt)" -i patch)" > $GITHUB_OUTPUT
       id: out
